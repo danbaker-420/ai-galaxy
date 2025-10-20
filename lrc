@@ -3,1105 +3,571 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LRC Tech Group Portal</title>
+    <title>AI Legal Tech Galaxy (Responsive)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Base styles for the dark, space theme */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #1f2937;
-            color: #e5e7eb;
-        }
-        .top-nav {
-            background-color: #111827;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-        .top-nav-item {
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            color: #d1d5db;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .top-nav-item:hover {
-            background-color: #374151;
-            color: #e65100;
-        }
-        .top-nav-item.active {
-            background-color: #e65100;
+            background-color: #0d1117; /* GitHub Dark Background */
             color: #ffffff;
-            box-shadow: 0 4px 6px rgba(230, 81, 0, 0.3);
-        }
-        .card {
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-        }
-        .logo-container {
+            /* Ensure the body uses the full viewport height/width */
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; 
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            padding-top: 1rem;
             justify-content: center;
             align-items: center;
         }
-        .logo-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 120px;
-            text-align: center;
-            height: 120px;
-            padding: 0.5rem;
-            background-color: #d1d5db; /* Light gray background for visibility */
+
+        /* Tooltip Styling */
+        #tooltip {
+            position: fixed;
+            background-color: #1f2937; /* Dark Gray background */
+            color: #ffffff;
+            border: 2px solid #e65100; /* Orange border */
+            padding: 1rem;
             border-radius: 8px;
-            border: 1px solid #6b7280;
-            cursor: pointer;
-            position: relative;
-            transition: transform 0.2s ease-in-out;
-            color: #111827; /* Darker text for contrast */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            opacity: 0;
+            pointer-events: none; /* Allows clicks to pass through when hidden */
+            transition: opacity 0.2s, transform 0.2s;
         }
-        .logo-item:hover {
-            transform: scale(1.05);
-        }
-        .logo-item img {
-            max-width: 80%;
-            max-height: 80%;
-            height: auto;
-            width: auto;
+        #tooltip h4 {
+            font-weight: 700;
+            color: #ffc107;
             margin-bottom: 0.5rem;
         }
-        .details-card {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #4b5563;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            z-index: 100;
-            width: 300px;
-            max-height: 80vh;
-            overflow-y: auto;
-            text-align: left;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            border: 2px solid #e65100;
-        }
-        .details-card.visible {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .table-container {
-            overflow-x: auto;
-            max-height: 70vh; /* Added to create a scrolling container */
-            overflow-y: auto; /* Added to enable vertical scrolling */
-        }
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.8rem;
-        }
-        .table th, .table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #4b5563;
-        }
-        .table th {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background-color: #4b5563;
-            font-weight: bold;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-        .table th:hover {
-            background-color: #6b7280;
-        }
-        .table tr:nth-child(even) {
-            background-color: #374151;
-        }
-        .description-cell {
-            min-width: 200px; /* Wider column for description */
-            max-width: 350px;
-            white-space: normal; /* Allow text to wrap naturally */
-        }
-        /* Spinner styling */
-        .spinner {
-            border-top-color: #e65100;
-            border-right-color: transparent;
-            border-bottom-color: transparent;
-            border-left-color: transparent;
-            border-width: 4px;
-            border-style: solid;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .marketecture-pillar {
-            background-color: #2d3748;
-            padding: 1.5rem;
-            border-radius: 12px;
-        }
 
-        .marketecture-card-commercial {
-            background-color: #a7f3d0;
-            color: #111827;
-        }
 
-        .marketecture-card-corporate {
-            background-color: #60a5fa;
-            color: #111827;
-        }
-
-        .marketecture-card-ai {
-            background-color: #c084fc;
-            color: #111827;
-        }
-
-        .tooltip {
-            position: fixed; /* Use fixed for better positioning outside parent container */
-            background-color: #1f2937;
-            color: #d1d5db;
-            padding: 0.75rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            z-index: 100;
-            width: 300px; /* fixed width */
-            border: 1px solid #e65100;
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-        
-        .loading-text-after::after {
-            content: '';
-            animation: dot-blink 2s infinite steps(1);
-        }
-        @keyframes dot-blink {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60% { content: '...'; }
-            80%, 100% { content: ''; }
-        }
-
-        /* Responsive iframe container */
-        .iframe-container {
+        /* Container for the solar system - Now uses viewport units for responsiveness */
+        #galaxy-system {
             position: relative;
-            overflow: hidden;
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-            border-radius: 8px;
-        }
-
-        .iframe-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Timeline styles */
-        .timeline {
-            position: relative;
-            padding: 1rem 0;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 2px;
-            background-color: #4b5563;
-            transform: translateX(-50%);
-            z-index: 10;
-        }
-
-        .timeline-item {
-            position: relative;
+            /* Use 90% of the viewport's smaller dimension (min) to ensure it fits landscape/portrait */
+            width: 90vmin; 
+            height: 90vmin;
             display: flex;
             justify-content: center;
-            margin: 2rem 0;
-        }
-
-        .timeline-item-dot {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 16px;
-            height: 16px;
-            background-color: #e65100;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 20;
-            border: 2px solid #1f2937;
-        }
-
-        .timeline-quarter-marker {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: -20px;
-            background-color: #111827;
-            color: #ffffff;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            z-index: 30;
-            border: 1px solid #e65100;
-        }
-
-        .timeline-item-card {
-            background-color: #2d3748;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            width: 45%;
+            align-items: center;
         }
         
-        .timeline-item:nth-child(even) .timeline-item-card {
-            margin-left: 55%;
+        /* Define base size in VW for responsive scaling */
+        /* All other sizes will be calculated as percentages of this VMAX unit */
+        .vmax-unit {
+            /* 100px for a 1000px container is 10vw, so 1vw is 10px. 
+               We will use a base unit of 0.1vmin (1/1000th of the container size) */
+            position: absolute; 
+            width: 0; 
+            height: 0; 
         }
 
-        .timeline-item:nth-child(odd) .timeline-item-card {
-            margin-right: 55%;
+        /* --- THE CORE (SUN) --- */
+        .sun {
+            /* REVERTED size: 150px. Now 15vmin for a 1000px system (15% of container) */
+            width: 15vmin; 
+            height: 15vmin; 
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffc107 0%, #e65100 80%); 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            /* Enhanced 3D appearance for the core */
+            box-shadow: 0 0 10vmin rgba(255, 193, 7, 0.7), inset 0 0 4vmin rgba(255, 255, 255, 0.5); 
+            font-weight: 700;
+            color: #111827;
+            position: absolute;
+            z-index: 10;
+            padding: 0.5vmin;
+            cursor: default; /* Change cursor back since it's now hover text */
+            transition: transform 0.3s ease, filter 0.2s ease;
+        }
+        .sun:hover {
+            filter: brightness(1.2); /* Haptic effect: Makes it slightly brighter on hover */
+        }
+        .sun-label {
+            line-height: 1.2;
+            font-size: 1.8vmin; /* Responsive font size */
+            white-space: nowrap;
+        }
+        .sun-icon {
+            font-size: 3vmin; /* Responsive icon size */
+            margin-bottom: 0.25vmin;
         }
 
-        /* Mobile adjustments for timeline */
-        @media (max-width: 768px) {
-            .timeline::before {
-                left: 20px;
-                transform: none;
-            }
-            .timeline-item-dot {
-                left: 20px;
-                transform: translateY(-50%);
-            }
-            .timeline-quarter-marker {
-                left: 20px;
-                transform: none;
-                top: 5px; /* Adjusting the vertical position for mobile */
-            }
-            .timeline-item {
-                display: block;
-                margin-left: 40px;
-            }
-            .timeline-item-card {
-                width: calc(100% - 40px);
-                margin: 1rem 0 !important;
+        /* --- PLANET STYLING AND POSITIONING (Static) --- */
+        .planet {
+            position: absolute;
+            transform: translate(-50%, -50%); 
+            cursor: default; /* Change cursor back since it's now hover text */
+            transition: transform 0.3s ease, filter 0.2s ease; /* Added filter transition for hover */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 5px;
+            font-weight: 600;
+            /* Enhanced Outer Shadow: Stronger drop shadow for lift */
+            box-shadow: 0 1vmin 3vmin rgba(0, 0, 0, 0.6); 
+            border: 0.2vmin solid rgba(255, 255, 255, 0.2);
+            z-index: 15;
+        }
+
+        .planet-logo {
+            width: 95%; 
+            height: 95%; 
+            border-radius: 50%; 
+            position: relative;
+            background-color: #d1d5db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Enhanced Inner Shadow: Soft white shadow for spherical detail */
+            box-shadow: inset 0 0 1vmin rgba(0, 0, 0, 0.3), inset 0 0 1vmin rgba(255, 255, 255, 0.2); 
+            overflow: hidden;
+            color: #111827;
+        }
+
+        .planet-logo img {
+            width: 90%; 
+            height: 90%;
+            object-fit: contain; 
+            border-radius: 50%; 
+            padding: 0.5vmin; /* Responsive padding */
+        }
+
+        .planet-name {
+            position: absolute;
+            bottom: -3vmin; /* Responsive position */
+            font-size: 1.5vmin; /* Responsive font size */
+            white-space: nowrap;
+            color: #e5e7eb;
+            background-color: rgba(0, 0, 0, 0.8); /* Darker background for contrast */
+            padding: 0.4vmin 0.8vmin; /* Responsive padding */
+            border-radius: 4px;
+        }
+
+        .planet:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            filter: brightness(1.2); /* Haptic effect: Makes it slightly brighter on hover */
+            z-index: 20;
+        }
+
+        /* Planet Size and Logo Styles - Converted to VMIN */
+        .size-lg { width: 20vmin; height: 20vmin; border-radius: 50%; } 
+        .size-md { width: 16vmin; height: 16vmin; border-radius: 50%; } 
+        .size-sm { width: 12vmin; height: 12vmin; border-radius: 50%; } 
+        .size-xs { width: 8vmin; height: 8vmin; border-radius: 50%; } 
+
+        /* Colors remain the same */
+        .color-purple { background: linear-gradient(135deg, #7e22ce, #a855f7); }
+        .color-red { background: linear-gradient(135deg, #dc2626, #f87171); }
+        .color-green { background: linear-gradient(135deg, #059669, #34d399); }
+        .color-orange { background: linear-gradient(135deg, #ea580c, #f97316); }
+        .color-rainbow { background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6); }
+        .color-blue { background: linear-gradient(135deg, #0284c7, #38bdf8); }
+        .color-yellow { background: linear-gradient(135deg, #f59e0b, #facc15); }
+
+        /* MOON STYLING AND POSITIONING (Relative to their planet) */
+        .moon-path {
+            position: absolute; 
+            width: 1px;
+            height: 1px;
+            top: 50%;
+            left: 50%;
+        }
+
+        .moon {
+            position: absolute;
+            transform: translate(-50%, -50%); 
+            cursor: default; /* Change cursor back since it's now hover text */
+            transition: transform 0.3s ease, filter 0.2s ease; /* Added filter transition for hover */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            /* Enhanced Outer Shadow */
+            box-shadow: 0 0.5vmin 1.5vmin rgba(0, 0, 0, 0.4); 
+            border: 0.1vmin solid rgba(255, 255, 255, 0.2);
+            font-weight: 500;
+        }
+
+        .moon-logo {
+            /* Enhanced Inner Shadow for moons */
+            box-shadow: inset 0 0 0.5vmin rgba(0, 0, 0, 0.3), inset 0 0 0.5vmin rgba(255, 255, 255, 0.2); 
+        }
+
+        .moon:hover {
+            filter: brightness(1.2); /* Haptic effect on hover */
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .moon-name {
+            position: absolute;
+            bottom: -3vmin; /* Responsive position */
+            font-size: 1.2vmin; /* Responsive font size */
+            white-space: nowrap;
+            color: #e5e7eb;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 0.2vmin 0.5vmin; /* Responsive padding */
+            border-radius: 3px;
+        }
+
+        /* Utility to style the placeholder logos */
+        .logo-placeholder {
+            font-size: 2vmin; /* Responsive font size */
+            font-weight: 700;
+            color: #111827;
+            line-height: 1;
+        }
+
+        /* Mobile Optimization: Ensure footer text doesn't overlap on tiny screens */
+        .footer-note {
+            font-size: 0.8rem;
+            padding: 0.5rem;
+        }
+        @media (max-width: 600px) {
+            .footer-note p {
+                line-height: 1.3;
             }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100">
+<body>
 
-<div class="top-nav">
-    <a href="#" class="top-nav-item active" data-tab="marketecture">Marketecture</a>
-    <a href="#" class="top-nav-item" data-tab="lrc-tech-ecosystem">LRC Tech Ecosystem</a>
-    <a href="#" class="top-nav-item" data-tab="lrc-initiatives">LRC Initiatives</a>
-    <a href="#" class="top-nav-item" data-tab="product-review">Monthly Product Review</a>
-    <a href="#" class="top-nav-item" data-tab="pipeline">LRC Tech Group Pipeline</a>
-    <a href="https://procoretech.atlassian.net/wiki/spaces/LRC/pages/edit-v2/4350247025?draftShareId=573b4b82-8c9d-415e-885f-fe2c00f1f21b" target="_blank" class="top-nav-item">LRC AI Knowledge Hub</a>
-</div>
+<!-- Tooltip element added for hover text -->
+<div id="tooltip"></div>
 
-<!-- Loading spinner, initially visible -->
-<div id="loading-spinner-container" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-900 bg-opacity-75">
-    <div class="flex items-center space-x-4">
-        <div class="spinner"></div>
-        <span class="text-xl font-medium text-gray-200">Loading the LRC Portal<span class="loading-text-after"></span></span>
-    </div>
-</div>
-
-<!-- Welcome text and button, initially hidden -->
-<div id="loading-text-container" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-900 bg-opacity-75 hidden">
-    <div class="bg-gray-800 p-8 rounded-xl max-w-2xl mx-auto text-center">
-        <h2 class="text-3xl font-bold text-orange-500 mb-4">LRC Tech Group Portal</h2>
-        <p class="text-lg text-gray-300 leading-relaxed mb-6">
-            Welcome to the Procore Legal, Regulatory, and Compliance (LRC) Technology Roadmap. Our mission is to shape the future of legal with innovative technology, empowering our team and our business partners. This roadmap is a living document that outlines our strategic vision, priorities, and key initiatives for improving our legal tech stack, with a keen focus on integrating cutting-edge AI technology. We're actively working on initiatives that range from enhancing our core CLM functions to piloting new legal research AI tools. Our goal is to drive efficiency, increase transparency, and enable our LRC team to act as an an innovative partner in the organization's success.
-        </p>
-        <button id="enter-button" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-full transition-colors">
-            Enter Portal
-        </button>
-    </div>
-</div>
-
-<div id="marketecture" class="tab-content hidden px-4 py-8 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-8 text-center">LRC Tech Group Marketecture</h1>
+<!-- Main Galaxy Visualization Container -->
+<div id="galaxy-system">
     
-    <!-- Leadership Section -->
-    <h2 class="text-2xl md:text-3xl font-bold text-gray-100 mb-6 text-center">LRC & G&A Tech Leadership</h2>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
-        <div class="flex flex-col items-center text-center p-4 card bg-gray-700 text-gray-200">
-            <p class="font-bold text-lg">Mick Cox</p>
-            <p class="text-sm text-gray-400">VP, Legal Operations</p>
-        </div>
-        <div class="flex flex-col items-center text-center p-4 card bg-gray-700 text-gray-200">
-            <p class="font-bold text-lg">Dan Baker</p>
-            <p class="text-sm text-gray-400">Director, Legal Operations</p>
-        </div>
-        <div class="flex flex-col items-center text-center p-4 card bg-gray-700 text-gray-200">
-            <p class="font-bold text-lg">Kalyani Pagadrai</p>
-            <p class="text-sm text-gray-400">Sr. Manager, Legal Operations, CLM</p>
-        </div>
-        <div class="flex flex-col items-center text-center p-4 card bg-gray-700 text-gray-200">
-            <p class="font-bold text-lg">Bobby Tranchon</p>
-            <p class="text-sm text-gray-400">G&A Prod & Eng Leader</p>
-        </div>
-        <div class="flex flex-col items-center text-center p-4 card bg-gray-700 text-gray-200">
-            <p class="font-bold text-lg">Marc Esteve</p>
-            <p class="text-sm text-gray-400">Finance & Legal Delivery Driver</p>
-        </div>
-        <div class="flex flex-col items-center text-center p-4 card bg-gray-700 text-gray-200">
-            <p class="font-bold text-lg">Chantal Erhardt</p>
-            <p class="text-sm text-gray-400">LRC Prod Mgmt Lead</p>
-        </div>
-    </div>
-    
-    <div class="flex flex-col gap-8">
-        <!-- Swimlane 1: Commercial Legal -->
-        <div class="marketecture-pillar p-6 rounded-xl">
-            <h3 class="text-xl font-bold mb-4">Commercial Legal</h3>
-            <div class="flex flex-wrap justify-center gap-4">
-                <div class="card p-4 marketecture-card-commercial w-full md:w-auto">
-                    <h4 class="font-bold text-lg">GTM Knowledge Management and Revenue Intelligence</h4>
-                    <div class="logo-container" id="commercial-gtm"></div>
-                </div>
-                <div class="card p-4 marketecture-card-commercial w-full md:w-auto">
-                    <h4 class="font-bold text-lg">Contract Lifecycle Management</h4>
-                    <div class="logo-container" id="commercial-clm"></div>
-                </div>
-                <div class="card p-4 marketecture-card-commercial w-full md:w-auto">
-                    <h4 class="font-bold text-lg">E-Signature</h4>
-                    <div class="logo-container" id="commercial-esignature"></div>
-                </div>
-                <div class="card p-4 marketecture-card-commercial w-full md:w-auto">
-                    <h4 class="font-bold text-lg">Salesforce Platform</h4>
-                    <div class="logo-container" id="commercial-salesforce"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Swimlane 2: Corporate Legal -->
-        <div class="marketecture-pillar p-6 rounded-xl">
-            <h3 class="text-xl font-bold mb-4">Corporate Legal</h3>
-            <div class="flex flex-wrap justify-center gap-4">
-                <div class="card p-4 marketecture-card-corporate w-full md:w-auto">
-                    <h4 class="font-bold text-lg">Legal News, Insights, and Education</h4>
-                    <div class="logo-container" id="corporate-news"></div>
-                </div>
-                <div class="card p-4 marketecture-card-corporate w-full md:w-auto">
-                    <h4 class="font-bold text-lg">Corporate Legal Research</h4>
-                    <div class="logo-container" id="corporate-research"></div>
-                </div>
-                <div class="card p-4 marketecture-card-corporate w-full md:w-auto">
-                    <h4 class="font-bold text-lg">eBilling & Matter Management</h4>
-                    <div class="logo-container" id="corporate-ebilling"></div>
-                </div>
-                <div class="card p-4 marketecture-card-corporate w-full md:w-auto">
-                    <h4 class="font-bold text-lg">Data & Compliance</h4>
-                    <div class="logo-container" id="corporate-compliance"></div>
-                </div>
-                <div class="card p-4 marketecture-card-corporate w-full md:w-auto">
-                    <h4 class="font-bold text-lg">eDiscovery & HR Compliance</h4>
-                    <div class="logo-container" id="corporate-ediscovery"></div>
-                </div>
-                <div class="card p-4 marketecture-card-corporate w-full md:w-auto">
-                    <h4 class="font-bold text-lg">Board Management</h4>
-                    <div class="logo-container" id="corporate-board"></div>
-                </div>
-                <div class="card p-4 marketecture-card-corporate w-full md:w-auto">
-                    <h4 class="font-bold text-lg">Tools for Project, Work & Communications</h4>
-                    <div class="logo-container" id="corporate-productivity"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Swimlane 3: AI & Analytics -->
-        <div class="marketecture-pillar p-6 rounded-xl">
-            <h3 class="text-xl font-bold mb-4">AI & Analytics</h3>
-            <div class="flex flex-wrap justify-center gap-4">
-                <div class="card p-4 marketecture-card-ai w-full md:w-auto">
-                    <h4 class="font-bold text-lg">AI-Powered Applications</h4>
-                    <div class="logo-container" id="ai-apps"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-    
-<div id="lrc-tech-ecosystem" class="tab-content hidden px-4 py-8 sm:px-6 lg:px-8">
-    <h2 class="text-2xl md:text-3xl font-bold text-gray-100 mb-6">LRC Technology & Services: Table View</h2>
-    <div class="flex flex-wrap gap-4 mb-4">
-        <input type="text" id="filter-application" placeholder="Filter by Application" class="p-2 border rounded-lg text-sm bg-gray-700 text-gray-200 border-gray-600 placeholder-gray-400">
-        <input type="text" id="filter-supplier" placeholder="Filter by Supplier" class="p-2 border rounded-lg text-sm bg-gray-700 text-gray-200 border-gray-600 placeholder-gray-400">
-        <input type="text" id="filter-lrc-function" placeholder="Filter by LRC Function" class="p-2 border rounded-lg text-sm bg-gray-700 text-gray-200 border-gray-600 placeholder-gray-400">
-        <select id="filter-lrc-owned" class="p-2 border rounded-lg text-sm bg-gray-700 text-gray-200 border-gray-600">
-            <option value="">LRC Owned</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select>
-        <input type="text" id="filter-description" placeholder="Filter by Description" class="p-2 border rounded-lg text-sm bg-gray-700 text-gray-200 border-gray-600 placeholder-gray-400">
-        <select id="filter-ai" class="p-2 border rounded-lg text-sm bg-gray-700 text-gray-200 border-gray-600">
-            <option value="">Leverages AI</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select>
-        <button id="clear-filters" class="top-nav-item py-2 px-4 text-sm">Clear Filters</button>
-    </div>
-    <div class="table-container">
-        <div id="loading-message" class="text-center text-gray-400 py-4">Loading data...</div>
-        <table class="table w-full hidden">
-            <thead>
-                <tr class="bg-gray-600 text-gray-200">
-                    <th class="py-2 px-4" onclick="sortTable('appName')">Application <span id="sort-appName"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('supplier')">Supplier <span id="sort-supplier"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('supportFunction')">LRC Support Function <span id="sort-supportFunction"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('lrcOwned')">LRC Owned <span id="sort-lrcOwned"></span></th>
-                    <th class="py-2 px-4">Description</th>
-                    <th class="py-2 px-4" onclick="sortTable('ai')">Leverages AI <span id="sort-ai"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('url')">Application URL <span id="sort-url"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('dataAnalytics')">Data Analytics <span id="sort-dataAnalytics"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('okta')">Okta <span id="sort-okta"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('access')">Request Access <span id="sort-access"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('lrcOwner')">LRC Support Owner <span id="sort-lrcOwner"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('techOwner')">Technical Support Owner <span id="sort-techOwner"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('costCenter')">Cost Center <span id="sort-costCenter"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('annualSpend')">Annual License Spend <span id="sort-annualSpend"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('userCount')">User Count <span id="sort-userCount"></span></th>
-                    <th class="py-2 px-4" onclick="sortTable('notes')">Notes <span id="sort-notes"></span></th>
-                </tr>
-            </thead>
-            <tbody id="app-table-body">
-                <!-- Table rows will be populated by JavaScript -->
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div id="lrc-initiatives" class="tab-content hidden px-4 py-8 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-8 text-center">LRC Initiatives</h1>
-
-    <div class="flex flex-wrap justify-center mb-6 gap-4" id="sub-tabs">
-        <button class="top-nav-item active" data-sub-tab="manual-work-tab">Reducing Manual Work & Collaboration</button>
-        <button class="top-nav-item" data-sub-tab="reporting-analytics-tab">Reporting & Analytics</button>
+    <!-- Sun/Core -->
+    <div class="sun" id="sun-core" data-system-name="Legal, Regulatory, & Compliance Core">
+        <span class="sun-icon">⚖️</span>
+        <div class="sun-label">Legal, Regulatory, & Compliance</div>
     </div>
 
-    <div id="manual-work-tab" class="sub-tab-content">
-        <h2 class="text-2xl font-bold mb-4">Reducing Manual Work & Facilitating Collaboration</h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-item-dot"></div>
-                <span class="timeline-quarter-marker">H2 2025 (Ongoing)</span>
-                <div class="timeline-item-card mt-6">
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="font-semibold text-gray-300">Service & Work Management</h4>
-                            <ul class="list-disc list-inside text-gray-400 ml-4">
-                                <li>Evaluate and implement a new work management tool to replace legacy systems.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-item-dot"></div>
-                <span class="timeline-quarter-marker">H1 2025 (Ongoing)</span>
-                <div class="timeline-item-card mt-6">
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="font-semibold text-gray-300">Scaling CLM & Software Solutions</h4>
-                            <ul class="list-disc list-inside text-gray-400 ml-4">
-                                <li>Finalize the CLM Gap Analysis and Optimization Assessment report.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-300">GTM Enablement</h4>
-                            <ul class="list-disc list-inside text-gray-400 ml-4">
-                                <li>Partner with the sales enablement team to embed legal guidance directly into the sales process.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-item-dot"></div>
-                <span class="timeline-quarter-marker">Q2 2025</span>
-                <div class="timeline-item-card mt-6">
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="font-semibold text-gray-300">Knowledge Management</h4>
-                            <ul class="list-disc list-inside text-gray-400 ml-4">
-                                <li>Integrate the new portal with relevant collaboration tools.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-item-dot"></div>
-                <span class="timeline-quarter-marker">Q1 2025</span>
-                <div class="timeline-item-card mt-6">
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="font-semibold text-gray-300">Service & Work Management</h4>
-                            <ul class="list-disc list-inside text-gray-400 ml-4">
-                                <li>Roll out new self-service knowledge articles for common legal questions.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-300">Knowledge Management</h4>
-                            <ul class="list-disc list-inside text-gray-400 ml-4">
-                                <li>Launch a consolidated knowledge management portal for all LRC team members.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-item-dot"></div>
-                <span class="timeline-quarter-marker">Q4 2024</span>
-                <div class="timeline-item-card mt-6">
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="font-semibold text-gray-300">Scaling CLM & Software Solutions</h4>
-                            <ul class="list-disc list-inside text-gray-400 ml-4">
-                                <li>Implement Ironclad AI Playbook and Assist for commercial teams.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-300">Service & Work Management</h4>
-                            <ul class="list-disc list-inside text-gray-400 ml-4">
-                                <li>Pilot and deploy a new legal intake form within a central platform.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-300">Knowledge Management</h4>
-                            <ul class="list-disc list-inside text-gray-400 ml-4">
-                                <li>Conduct a content audit of existing knowledge bases.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-300">GTM Enablement</h4>
-                            <ul class="list-disc list-inside text-gray-400 ml-4">
-                                <li>Launch a GTM-focused legal resource hub.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="reporting-analytics-tab" class="sub-tab-content hidden">
-        <h2 class="text-2xl font-bold mb-4">Reporting & Analytics to Help LRC Make Informed Decisions</h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-item-dot"></div>
-                <span class="timeline-quarter-marker">H1 2025 (Ongoing)</span>
-                <div class="timeline-item-card mt-6">
-                    <ul class="list-disc list-inside text-gray-300 ml-4">
-                        <li>Conduct a deep-dive analysis of contract negotiation timelines.</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-item-dot"></div>
-                <span class="timeline-quarter-marker">Q1 2025</span>
-                <div class="timeline-item-card mt-6">
-                    <ul class="list-disc list-inside text-gray-300 ml-4">
-                        <li>Build interactive dashboards in Tableau to visualize contract and matter data.</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-item-dot"></div>
-                <span class="timeline-quarter-marker">Q4 2024</span>
-                <div class="timeline-item-card mt-6">
-                    <ul class="list-disc list-inside text-gray-300 ml-4">
-                        <li>Define key performance indicators (KPIs) for legal efficiency and business impact.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="product-review" class="tab-content hidden px-4 py-8 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-8 text-center">Monthly Product Review</h1>
-    <div class="bg-gray-700 rounded-lg p-6 shadow-md mb-6">
-        <!-- The iframe container makes the Google Slides embed responsive -->
-        <div class="iframe-container">
-            <iframe src="https://docs.google.com/presentation/d/1wY7AJwpaHJrESe7zs3C2eIpdYBTrCWB9DJELrn_fFxI/embed?start=false&loop=false&delayms=3000" frameborder="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" title="Monthly Product Review"></iframe>
-        </div>
-    </div>
-</div>
-
-<div id="pipeline" class="tab-content hidden px-4 py-8 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-8 text-center">LRC Tech Group Pipeline</h1>
-    <div class="bg-gray-700 rounded-lg p-6 shadow-md mb-6 text-center">
-        <p class="text-xl text-gray-200 leading-relaxed">
-            Access the latest project statuses and future initiatives on the LRC Tech Group Pipeline.
-        </p>
-        <a href="https://procoretech.atlassian.net/jira/dashboards/21644" target="_blank" class="top-nav-item mt-4 inline-block">View Jira Dashboard</a>
-    </div>
-</div>
-
-
-<!-- Tooltip element for hovering details -->
-<div id="tooltip" class="tooltip"></div>
-
-<script>
-    // Static app data array
-    const appData = [
-        { appName: "Adobe Acrobat Pro DC", supplier: "Adobe Inc.", supportFunction: "Legal Operations", lrcOwned: "No", description: "PDF editor", ai: "No", url: "https://www.adobe.com/acrobat/acrobat-pro-dc.html", dataAnalytics: "No", okta: "Y", access: "Adobe Acrobat", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1001-5000", notes: "Enterprise SSO" },
-        { appName: "Agenda", supplier: "Money-Media", supportFunction: "Legal Operations", lrcOwned: "Yes", description: "Boardroom resource, providing the most influential source of intelligence for today’s corporate directors. Agenda gives subscribers an in-depth look into the most relevant issues hitting corporate boardrooms across the country.", ai: "No", url: "N/A", dataAnalytics: "No", okta: "N", access: "Via email", lrcOwner: "Carrie Barnhill", techOwner: "N/A", costCenter: "5600 - Legal", annualSpend: "$3,510.00", userCount: "1-10", notes: "Subscription - By User" },
-        { appName: "Atlassian", supplier: "Atlassian Pty Ltd", supportFunction: "Legal Operations", lrcOwned: "No", description: "Project and work management", ai: "No", url: "https://www.atlassian.com/", dataAnalytics: "No", okta: "Y", access: "Atlassian", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1001-5000", notes: "Enterprise SSO" },
-        { appName: "ComplianceHR", supplier: "ComplianceHR", supportFunction: "Employment, Litigation, & Compliance", lrcOwned: "Yes", description: "FLSA Audit", ai: "No", url: "N/A", dataAnalytics: "No", okta: "N", access: "Via email", lrcOwner: "Marlene Nicolas", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "N/A", notes: "Renewal - no spend until 2025" },
-        { appName: "Confluence", supplier: "Atlassian Pty Ltd", supportFunction: "Legal Operations", lrcOwned: "No", description: "Web-based corporate wiki / content management", ai: "No", url: "https://www.atlassian.com/software/confluence", dataAnalytics: "No", okta: "Y", access: "Confluence", lrcOwner: "Dan Baker", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1001-5000", notes: "Enterprise SSO" },
-        { appName: "Diligent Board Portal", supplier: "Diligent Corporation", supportFunction: "Board Management", lrcOwned: "Yes", description: "Board management and entity management", ai: "No", url: "https://www.diligent.com/board-software", dataAnalytics: "No", okta: "Y", access: "Diligent", lrcOwner: "N/A", techOwner: "N/A", costCenter: "5600 - Legal", annualSpend: "$100,000.00", userCount: "1-10", notes: "NA" },
-        { appName: "DocuSign", supplier: "DocuSign", supportFunction: "Legal Operations", lrcOwned: "No", description: "Esignature", ai: "No", url: "https://www.docusign.com/", dataAnalytics: "No", okta: "Y", access: "DocuSign", lrcOwner: "Dan Baker", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1001-5000", notes: "Enterprise SSO" },
-        { appName: "E2Open", supplier: "Amber Road Inc.", supportFunction: "Employment, Litigation, & Compliance", lrcOwned: "No", description: "Supplier risk management", ai: "Yes", url: "https://www.e2open.com/", dataAnalytics: "No", okta: "N", access: "Via email", lrcOwner: "Marlene Nicolas", techOwner: "N/A", costCenter: "3300 - Shared Expense", annualSpend: "$25,000.00", userCount: "1-10", notes: "" },
-        { appName: "Figma", supplier: "Figma", supportFunction: "Legal Operations", lrcOwned: "No", description: "Collaborative design platform", ai: "No", url: "https://www.figma.com/", dataAnalytics: "No", okta: "Y", access: "Figma", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1001-5000", notes: "Enterprise SSO" },
-        { appName: "Filerskeepers Dashboard", supplier: "Filerskeepers", supportFunction: "Legal Operations", lrcOwned: "No", description: "Automated records retention schedule management", ai: "Yes", url: "https://www.filerskeepers.com/", dataAnalytics: "No", okta: "Y", access: "Filerskeepers", lrcOwner: "Marlene Nicolas", techOwner: "N/A", costCenter: "5600 - Legal", annualSpend: "$25,000.00", userCount: "11-25", notes: "" },
-        { appName: "Gartner Legal", supplier: "Gartner", supportFunction: "Legal Operations", lrcOwned: "No", description: "Continuing legal education", ai: "No", url: "https://www.gartner.com/en/legal-compliance", dataAnalytics: "No", okta: "N", access: "Via email", lrcOwner: "N/A", techOwner: "N/A", costCenter: "5600 - Legal", annualSpend: "$66,750.00", userCount: "1-10", notes: "" },
-        { appName: "Gong", supplier: "Gong.io", supportFunction: "GTM Knowledge Management and Revenue Intelligence", lrcOwned: "No", description: "Revenue intelligence and conversation analytics platform", ai: "Yes", url: "https://www.gong.io/", dataAnalytics: "Yes", okta: "Y", access: "Gong", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1001-5000", notes: "Managed by Sales Ops." },
-        { appName: "Google Agentspace", supplier: "Google", supportFunction: "Legal Operations", description: "AI-powered tool for custom workflows", ai: "Yes", url: "https://agentspace.google.com/", dataAnalytics: "Yes", okta: "Y", access: "Google Agentspace", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "N/A", notes: "POC only." },
-        { appName: "Google Suite", supplier: "Google LLC", supportFunction: "Legal Operations", lrcOwned: "No", description: "Office collaboration and AI", ai: "Yes", url: "https://workspace.google.com/", dataAnalytics: "No", okta: "Y", access: "Google Suite", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "5001+", notes: "Enterprise SSO" },
-        { appName: "Harvey.ai", supplier: "Harvey", supportFunction: "Corporate Legal Research", lrcOwned: "No", description: "AI platform for legal professionals", ai: "Yes", url: "https://www.harvey.ai/", dataAnalytics: "No", okta: "N", access: "N/A", lrcOwner: "N/A", techOwner: "N/A", costCenter: "5600 - Legal", annualSpend: "N/A", userCount: "N/A", notes: "POC only." },
-        { appName: "Highspot", supplier: "Highspot", supportFunction: "GTM Knowledge Management and Revenue Intelligence", lrcOwned: "No", description: "Sales enablement platform", ai: "Yes", url: "https://www.highspot.com/", dataAnalytics: "Yes", okta: "Y", access: "Highspot", lrcOwner: "Dan Baker", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1001-5000", notes: "Managed by Sales Enablement." },
-        { appName: "Ironclad", supplier: "Ironclad", supportFunction: "Contract Lifecycle Management", lrcOwned: "Yes", description: "Contract Lifecycle Management (CLM)", ai: "Yes", url: "https://www.ironcladapp.com/", dataAnalytics: "Yes", okta: "Y", access: "Ironclad", lrcOwner: "Kalyani Pagadrai", techOwner: "Larisa Hoit / Amit Kumar", costCenter: "5600 - Legal", annualSpend: "$195,000.00", userCount: "1-100", notes: "" },
-        { appName: "Law360", supplier: "LexisNexis", supportFunction: "Legal Operations", lrcOwned: "Yes", description: "Legal news and insights", ai: "No", url: "https://www.law360.com/", dataAnalytics: "No", okta: "N", access: "Via email", lrcOwner: "N/A", techOwner: "N/A", costCenter: "5600 - Legal", annualSpend: "$14,303.00", userCount: "1-10", notes: "" },
-        { appName: "Logikcull", supplier: "Logikcull", supportFunction: "eDiscovery", lrcOwned: "Yes", description: "Cloud-based eDiscovery platform", ai: "Yes", url: "https://www.logikcull.com/", dataAnalytics: "Yes", okta: "Y", access: "Logikcull", lrcOwner: "Marlene Nicolas", techOwner: "Shane Redman", costCenter: "5600 - Legal", annualSpend: "$115,000.00", userCount: "1-10", notes: "" },
-        { appName: "Lucidchart", supplier: "Lucid Software Inc.", supportFunction: "Legal Operations", lrcOwned: "No", description: "Process & data visualization tool", ai: "No", url: "https://www.lucidchart.com/", dataAnalytics: "No", okta: "Y", access: "Lucidchart", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1001-5000", notes: "Enterprise SSO" },
-        { appName: "Luminance", supplier: "Luminance", supportFunction: "Legal Operations", lrcOwned: "Yes", description: "AI for legal document review", ai: "Yes", url: "https://www.luminance.com/", dataAnalytics: "No", okta: "N", access: "Via email", lrcOwner: "Dan Baker", techOwner: "N/A", costCenter: "5600 - Legal", annualSpend: "$25,000.00", userCount: "11-25", notes: "Pilot program." },
-        { appName: "Microsoft 365", supplier: "Microsoft Corporation", supportFunction: "Legal Operations", lrcOwned: "No", description: "Office collaboration and AI", ai: "Yes", url: "https://www.microsoft.com/en-us/microsoft-365", dataAnalytics: "No", okta: "Y", access: "O365 Desktop", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1001-5000", notes: "Enterprise SSO" },
-        { appName: "Monday.com", supplier: "Monday.com", supportFunction: "Legal Operations", lrcOwned: "No", description: "Project and work management", ai: "No", url: "https://monday.com/", dataAnalytics: "No", okta: "N", access: "Via email", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1-10", notes: "Legacy tool for Legal Operations - to be sunset." },
-        { appName: "Moveworks.ai", supplier: "Moveworks", supportFunction: "Service & Work Management", lrcOwned: "No", description: "AI-powered virtual service agent", ai: "Yes", url: "https://www.moveworks.com/", dataAnalytics: "Yes", okta: "Y", access: "Moveworks", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1001-5000", notes: "Managed by ITSM." },
-        { appName: "NAVEX", supplier: "NAVEX", supportFunction: "Legal Operations", lrcOwned: "No", description: "GRC platform", ai: "No", url: "https://www.navex.com/", dataAnalytics: "No", okta: "N", access: "Via email", lrcOwner: "Roxy Dugger", techOwner: "N/A", costCenter: "5600 - Legal", annualSpend: "$51,000.00", userCount: "1-10", notes: "" },
-        { appName: "NAVEX EthicsPoint", supplier: "NAVEX", supportFunction: "Employment, Litigation, & Compliance", lrcOwned: "Yes", description: "Confidential reporting tool", ai: "No", url: "https://www.navex.com/", dataAnalytics: "No", okta: "N", access: "Via email", lrcOwner: "Marlene Nicolas", techOwner: "N/A", costCenter: "5600 - Legal", annualSpend: "$14,303.00", userCount: "1-10", notes: "" },
-        { appName: "OneTrust", supplier: "OneTrust", supportFunction: "Global Data Protection & Privacy", lrcOwned: "Yes", description: "Privacy and content management", ai: "No", url: "https://www.onetrust.com/", dataAnalytics: "No", okta: "Y", access: "OneTrust", lrcOwner: "Roxy Dugger", techOwner: "N/A", costCenter: "5600 - Legal", annualSpend: "$51,000.00", userCount: "11-25", notes: "" },
-        { appName: "PLI", supplier: "Practising Law Institute", supportFunction: "Legal Operations", lrcOwned: "Yes", description: "Continuing legal education", ai: "No", url: "https://www.pli.edu/", dataAnalytics: "No", okta: "N", access: "Via email", lrcOwner: "N/A", techOwner: "N/A", costCenter: "5600 - Legal", annualSpend: "$12,130.00", userCount: "26-49", notes: "" },
-        { appName: "Salesforce", supplier: "Salesforce", supportFunction: "GTM", lrcOwned: "No", description: "CRM platform with CLM integration", ai: "Yes", url: "https://www.salesforce.com/", dataAnalytics: "Yes", okta: "Y", access: "Salesforce", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "5001+", notes: "GTM." },
-        { appName: "SimpleLegal", supplier: "SimpleLegal", supportFunction: "Legal Operations", lrcOwned: "No", description: "eBilling & matter management", ai: "No", url: "https://www.simplelegal.com/", dataAnalytics: "No", okta: "Y", access: "SimpleLegal", lrcOwner: "Carrie Barnhill", techOwner: "Chantal Erhardt", costCenter: "5600 - Legal", annualSpend: "$24,000.00", userCount: "50-100", notes: "" },
-        { appName: "SimpleMatters", supplier: "SimpleMatters", supportFunction: "Corporate Legal Research", lrcOwned: "No", description: "Provides simple legal matter management and research tools for internal legal teams.", ai: "No", url: "https://www.simplematters.com", dataAnalytics: "No", okta: "N/A", access: "SimpleMatters", lrcOwner: "Dan Baker", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "N/A", notes: "Placeholder data." },
-        { appName: "Slack", supplier: "Salesforce", supportFunction: "Legal Operations", lrcOwned: "No", description: "Office collaboration and AI", ai: "Yes", url: "https://slack.com/", dataAnalytics: "No", okta: "Y", access: "Slack", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "5001+", notes: "Enterprise SSO" },
-        { appName: "Tableau", supplier: "Tableau Software", supportFunction: "Legal Operations", lrcOwned: "No", description: "Business intelligence reporting", ai: "No", url: "https://www.tableau.com/", dataAnalytics: "No", okta: "Y", access: "Tableau", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "1001-5000", notes: "Enterprise SSO" },
-        { appName: "Zoom", supplier: "Zoom Video Communications", supportFunction: "Legal Operations", lrcOwned: "No", description: "Office collaboration and AI", ai: "Yes", url: "https://zoom.us/", dataAnalytics: "No", okta: "Y", access: "Zoom", lrcOwner: "N/A", techOwner: "N/A", costCenter: "N/A", annualSpend: "N/A", userCount: "5001+", notes: "Enterprise SSO" }
-    ];
-
-    let currentSortColumn = null;
-    let sortDirection = 'asc';
-
-    const columns = [
-        'appName', 'supplier', 'supportFunction', 'lrcOwned', 'description', 'ai', 'url', 'dataAnalytics', 'okta', 'access', 'lrcOwner', 'techOwner', 'costCenter', 'annualSpend', 'userCount', 'notes'
-    ];
-    
-    /**
-     * Renders application logos in the Marketecture view based on predefined categories.
-     * It uses clearbit.com for logos when a valid URL is available, and a placeholder image otherwise.
-     * @param {Array<Object>} data The app data array.
-     */
-    function renderAppLogos(data) {
-        const categories = {
-            'commercial-gtm': ["Highspot", "Gong"],
-            'commercial-clm': ["Ironclad"],
-            'commercial-esignature': ["DocuSign"],
-            'commercial-salesforce': ["Salesforce"],
-            'corporate-news': ["Law360", "Gartner Legal", "PLI"],
-            'corporate-research': ["Harvey.ai", "Figma", "Google Agentspace", "SimpleMatters"],
-            'corporate-ebilling': ["SimpleLegal"],
-            'corporate-compliance': ["E2Open", "NAVEX", "Filerskeepers Dashboard", "OneTrust"],
-            'corporate-ediscovery': ["Logikcull", "NAVEX EthicsPoint"],
-            'corporate-board': ["Diligent Board Portal"],
-            'corporate-productivity': ["Adobe Acrobat Pro DC", "Atlassian", "Confluence", "Figma", "Google Suite", "Lucidchart", "Microsoft 365", "Monday.com", "Slack", "Tableau", "Zoom", "Moveworks.ai"],
-            'ai-apps': data.filter(app => app.ai === 'Yes').map(app => app.appName),
-        };
-
-        const placeholderBaseUrl = 'https://placehold.co/100x100/d1d5db/111827?text=';
-        const clearbitBaseUrl = 'https://logo.clearbit.com/';
-
-        for (const [containerId, appNames] of Object.entries(categories)) {
-            const container = document.getElementById(containerId);
-            if (container) {
-                container.innerHTML = '';
-                appNames.forEach(appName => {
-                    const app = data.find(a => a.appName === appName);
-                    if (app) {
-                        const logoItem = document.createElement('div');
-                        logoItem.className = 'logo-item';
-                        logoItem.setAttribute('data-app-name', app.appName);
-                        
-                        const img = document.createElement('img');
-                        // Use a simple check to determine logo source
-                        img.src = app.url && app.url !== 'N/A' ? `${clearbitBaseUrl}${new URL(app.url).hostname}` : `${placeholderBaseUrl}${encodeURIComponent(app.appName.split(' ')[0])}`;
-                        img.onerror = () => {
-                            // Fallback to the placeholder image if the Clearbit logo fails to load
-                            img.src = `${placeholderBaseUrl}${encodeURIComponent(app.appName.split(' ')[0])}`;
-                            img.alt = `${app.appName} logo not available`;
-                        };
-                        img.alt = `${app.appName} Logo`;
-
-                        const name = document.createElement('p');
-                        name.className = 'text-sm font-semibold';
-                        name.textContent = app.appName;
-
-                        logoItem.appendChild(img);
-                        logoItem.appendChild(name);
-                        container.appendChild(logoItem);
-                    }
-                });
-            }
-        }
-    }
-    
-    /**
-     * Shows the tooltip with details about the hovered application logo.
-     * @param {Event} event The mouse event object.
-     */
-    function showTooltip(event) {
-        const logoItem = event.target.closest('.logo-item');
-        if (!logoItem) {
-            hideTooltip(); // Hide tooltip if not hovering over a logo item
-            return;
-        }
-
-        const appName = logoItem.getAttribute('data-app-name');
-        const app = appData.find(a => a.appName === appName);
-        if (!app) return;
-
-        const tooltip = document.getElementById('tooltip');
-        let detailsHtml = `
-            <h4 class="font-bold text-lg mb-2">${app.appName}</h4>
-            <div class="text-sm space-y-1">
-                <p><strong>Supplier:</strong> ${app.supplier || 'N/A'}</p>
-                <p><strong>LRC Function:</strong> ${app.supportFunction || 'N/A'}</p>
-                <p><strong>LRC Owned:</strong> ${app.lrcOwned || 'No'}</p>
-                <p><strong>Description:</strong> ${app.description || 'N/A'}</p>
-                <p><strong>Leverages AI:</strong> ${app.ai || 'No'}</p>
-                <p><strong>URL:</strong> <a href="${app.url && app.url !== 'N/A' ? app.url : '#'}" target="_blank" class="text-blue-400 hover:underline">${app.url && app.url !== 'N/A' ? 'Link' : 'N/A'}</a></p>
-                <p><strong>Data Analytics:</strong> ${app.dataAnalytics || 'No'}</p>
-                <p><strong>Okta:</strong> ${app.okta || 'N/A'}</p>
-                <p><strong>Access:</strong> ${app.access || 'N/A'}</p>
-                <p><strong>LRC Support Owner:</strong> ${app.lrcOwner || 'N/A'}</p>
-                <p><strong>Technical Support Owner:</strong> ${app.techOwner || 'N/A'}</p>
-                <p><strong>Cost Center:</strong> ${app.costCenter || 'N/A'}</p>
-                <p><strong>Annual Spend:</strong> ${app.annualSpend || 'N/A'}</p>
-                <p><strong>User Count:</strong> ${app.userCount || 'N/A'}</p>
-                <p><strong>Notes:</strong> ${app.notes || 'N/A'}</p>
-            </div>
-        `;
-        tooltip.innerHTML = detailsHtml;
-
-        const rect = logoItem.getBoundingClientRect();
-        tooltip.style.left = `${rect.left + rect.width / 2}px`;
-        tooltip.style.top = `${rect.top + rect.height + 10}px`;
-        tooltip.style.transform = 'translateX(-50%)';
-        tooltip.style.opacity = '1';
-    }
-
-    /**
-     * Hides the tooltip.
-     */
-    function hideTooltip() {
-        const tooltip = document.getElementById('tooltip');
-        if (tooltip) {
-            tooltip.style.opacity = '0';
-        }
-    }
-
-    /**
-     * Debounces a function call to limit its execution rate.
-     * @param {Function} func The function to debounce.
-     * @param {number} delay The delay in milliseconds.
-     * @returns {Function} The debounced function.
-     */
-    function debounce(func, delay) {
-        let timeout;
-        return function(...args) {
-            const context = this;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), delay);
-        };
-    }
-    
-    /**
-     * Sorts the application data table based on a given column.
-     * It handles both numeric and string values.
-     * @param {string} columnName The name of the column to sort by.
-     */
-    function sortTable(columnName) {
-        if (currentSortColumn === columnName) {
-            sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            currentSortColumn = columnName;
-            sortDirection = 'asc';
-        }
-
-        appData.sort((a, b) => {
-            const aVal = a[currentSortColumn];
-            const bVal = b[currentSortColumn];
-
-            const parseNumeric = (value) => {
-                if (typeof value === 'string') {
-                    const cleanValue = value.replace(/[$, ]/g, '');
-                    const parsed = parseFloat(cleanValue);
-                    return isNaN(parsed) ? Infinity : parsed;
+    <script>
+        // Start IIFE to contain variable scope and prevent global redeclaration errors
+        (function() {
+            // Updated galaxyData with usage descriptions
+            const galaxyData = [
+                {
+                    name: "Harvey.ai", 
+                    colorClass: "color-purple", 
+                    sizeClass: "size-md", 
+                    logo: `<img src="https://logo.clearbit.com/www.harvey.ai" onerror="this.src='https://placehold.co/100x100/7e22ce/ffffff?text=H';" alt="Harvey.ai Logo">`,
+                    isImageLogo: true, 
+                    usage: "Used for rapid **legal research, summarizing case law**, and drafting initial documents like memos and motions based on proprietary firm knowledge.",
+                    moons: []
+                },
+                {
+                    name: "Law360", 
+                    colorClass: "color-red", 
+                    sizeClass: "size-md", 
+                    logo: "L360",
+                    isImageLogo: false,
+                    usage: "Used for **daily news aggregation**, staying current on regulatory changes, and tracking competitor litigation in specific jurisdictions.",
+                    moons: []
+                },
+                {
+                    name: "Luminance", 
+                    colorClass: "color-green", 
+                    sizeClass: "size-md", 
+                    // UPDATED LOGO URL
+                    logo: `<img src="https://logo.clearbit.com/www.luminance.com" onerror="this.src='https://placehold.co/100x100/059669/ffffff?text=L';" alt="Luminance Logo">`,
+                    isImageLogo: true,
+                    usage: "Used for **M&A due diligence**, quickly reviewing large volumes of contracts to identify and classify key clauses (e.g., change of control, indemnity).",
+                    moons: []
+                },
+                {
+                    name: "Rovo", 
+                    colorClass: "color-orange", 
+                    sizeClass: "size-md", 
+                    logo: "R",
+                    isImageLogo: false,
+                    usage: "Used for **internal knowledge retrieval**, answering employee questions instantly by searching across internal documents (policies, playbooks, forms).",
+                    moons: []
+                },
+                {
+                    name: "Gemini 2.5 Pro", 
+                    colorClass: "color-rainbow", 
+                    sizeClass: "size-lg", 
+                    // UPDATED LOGO URL
+                    logo: `<img src="https://logo.clearbit.com/agentspace.google.com" onerror="this.src='https://placehold.co/100x100/9400d3/ffffff?text=G2.5';" alt="Gemini 2.5 Pro Logo">`,
+                    isImageLogo: true,
+                    usage: "The **advanced generative AI platform** powering custom workflows and complex reasoning across legal data sets, including complex contract drafting and risk scoring.",
+                    moons: [
+                        { name: "Gemini Gems", colorClass: "color-blue", sizeClass: "size-sm", logo: "GG", usage: "A specialized, secure version for **highly sensitive tasks** requiring maximum data isolation, such as privileged communication review." },
+                        { name: "NotebookLM", colorClass: "color-yellow", sizeClass: "size-sm", logo: "NLM", usage: "Used for **deep document analysis** and synthesis, creating detailed reports and executive summaries from diverse sources (e.g., litigation transcripts, regulatory filings)." }
+                    ]
                 }
-                return value === null || value === undefined ? Infinity : value;
+            ];
+
+            const coreUsage = { 
+                name: "Legal, Regulatory, & Compliance Core",
+                usage: "The central function governing organizational risk, legal operations, and adherence to global regulations. It serves as the **core mission** and hub for all integrated legal technology."
             };
 
-            const aParsed = parseNumeric(aVal);
-            const bParsed = parseNumeric(bVal);
 
-            if (aParsed !== Infinity && bParsed !== Infinity) {
-                return sortDirection === 'asc' ? aParsed - bParsed : bParsed - aParsed;
-            } else {
-                const aStr = String(aVal || '').toLowerCase();
-                const bStr = String(bVal || '').toLowerCase();
-                return sortDirection === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
+            const galaxySystem = document.getElementById('galaxy-system');
+            const sun = document.querySelector('.sun');
+            const tooltip = document.getElementById('tooltip');
+            
+            // Function to find data by name, including the core
+            function findSystemData(name) {
+                if (name === coreUsage.name) return coreUsage;
+                
+                let found = galaxyData.find(p => p.name === name);
+                if (found) return found;
+
+                for (const planet of galaxyData) {
+                    if (planet.moons) {
+                        found = planet.moons.find(m => m.name === name);
+                        if (found) return found;
+                    }
+                }
+                return { name: name, usage: 'Usage details are currently unavailable for this system.' };
             }
-        });
+            
+            /**
+             * Shows the tooltip next to the hovered element.
+             * @param {HTMLElement} element The planet, moon, or sun element being hovered.
+             */
+            function showTooltip(element) {
+                const name = element.getAttribute('data-system-name');
+                const data = findSystemData(name);
+                
+                if (!data || !data.usage) return hideTooltip();
 
-        updateSortIcons(currentSortColumn, sortDirection);
-        renderTable(appData);
-    }
+                const rect = element.getBoundingClientRect();
+                
+                tooltip.innerHTML = `<h4>${data.name}</h4><p>${data.usage}</p>`;
 
-    /**
-     * Updates the sort icons in the table header.
-     * @param {string} columnName The name of the currently sorted column.
-     * @param {string} direction The current sort direction ('asc' or 'desc').
-     */
-    function updateSortIcons(columnName, direction) {
-        document.querySelectorAll('span[id^="sort-"]').forEach(span => {
-            span.textContent = '';
-        });
-        const iconSpan = document.getElementById(`sort-${columnName}`);
-        if (iconSpan) {
-            iconSpan.textContent = direction === 'asc' ? '▲' : '▼';
-        }
-    }
+                // Determine position: Place to the right if possible, otherwise to the left.
+                let x = rect.right + 10;
+                let y = rect.top + (rect.height / 2);
+                
+                // Adjust position if it goes off the right edge
+                if (x + tooltip.offsetWidth > window.innerWidth) {
+                    x = rect.left - tooltip.offsetWidth - 10; // Move to the left of the element
+                    if (x < 0) x = 10; // Fallback for very small screens
+                }
+                
+                // Adjust y position to center the tooltip vertically relative to the element
+                y -= tooltip.offsetHeight / 2;
+                
+                // Prevent tooltip from going off the top/bottom of the screen
+                if (y < 10) y = 10;
+                if (y + tooltip.offsetHeight > window.innerHeight) {
+                    y = window.innerHeight - tooltip.offsetHeight - 10;
+                }
+                
+                tooltip.style.left = `${x}px`;
+                tooltip.style.top = `${y}px`;
+                tooltip.style.opacity = '1';
+                tooltip.style.pointerEvents = 'auto';
+            }
 
-    /**
-     * Renders the application data table based on current filters and sort order.
-     * @param {Array<Object>} data The data array to render.
-     */
-    function renderTable(data) {
-        const tableBody = document.getElementById('app-table-body');
-        const loadingMessage = document.getElementById('loading-message');
-        const table = document.querySelector('#lrc-tech-ecosystem .table');
-        
-        if (!tableBody || !loadingMessage || !table) return;
+            /**
+             * Hides the tooltip.
+             */
+            function hideTooltip() {
+                tooltip.style.opacity = '0';
+                tooltip.style.pointerEvents = 'none';
+            }
 
-        loadingMessage.classList.add('hidden');
-        table.classList.remove('hidden');
 
-        const filters = {
-            appName: document.getElementById('filter-application').value.toLowerCase(),
-            supplier: document.getElementById('filter-supplier').value.toLowerCase(),
-            supportFunction: document.getElementById('filter-lrc-function').value.toLowerCase(),
-            lrcOwned: document.getElementById('filter-lrc-owned').value,
-            description: document.getElementById('filter-description').value.toLowerCase(),
-            ai: document.getElementById('filter-ai').value,
-        };
+            // Configuration for static radial map - now using relative units based on container size
+            
+            // Get the actual runtime size of the container (in pixels, which is needed for SVG coordinates)
+            const size = galaxySystem.offsetWidth;
+            const centerX = Math.round(size / 2); // ROUNDED
+            const centerY = Math.round(size / 2); // ROUNDED
+            
+            // R (Radius): 40% of the container width/height (was 400px of 1000px)
+            const R = size * 0.40; 
+            
+            // R_MOON (Moon distance): 20% of the container width/height (was 200px of 1000px)
+            const R_MOON = size * 0.20; 
 
-        const filteredData = data.filter(app => {
-            const appNameMatch = (app.appName || '').toLowerCase().includes(filters.appName);
-            const supplierMatch = (app.supplier || '').toLowerCase().includes(filters.supplier);
-            const supportFunctionMatch = (app.supportFunction || '').toLowerCase().includes(filters.supportFunction);
-            const lrcOwnedMatch = (filters.lrcOwned === '' || (app.lrcOwned || '').toLowerCase() === filters.lrcOwned.toLowerCase());
-            const descriptionMatch = (app.description || '').toLowerCase().includes(filters.description);
-            const aiMatch = (filters.ai === '' || (app.ai || '').toLowerCase() === filters.ai.toLowerCase());
-            return appNameMatch && supplierMatch && supportFunctionMatch && lrcOwnedMatch && descriptionMatch && aiMatch;
-        });
-        
-        let html = '';
-        if (filteredData.length === 0) {
-            html += `<tr><td colspan="16" class="text-center py-4 text-gray-400">No matching data found.</td></tr>`;
-        } else {
-            filteredData.forEach(app => {
-                html += `
-                    <tr>
-                        <td class="py-2 px-4 font-semibold">${app.appName || 'N/A'}</td>
-                        <td class="py-2 px-4">${app.supplier || 'N/A'}</td>
-                        <td class="py-2 px-4">${app.supportFunction || 'N/A'}</td>
-                        <td class="py-2 px-4">${app.lrcOwned || 'No'}</td>
-                        <td class="py-2 px-4 description-cell" title="${app.description || ''}">${app.description || 'N/A'}</td>
-                        <td class="py-2 px-4">${app.ai || 'No'}</td>
-                        <td class="py-2 px-4"><a href="${app.url || '#'}" target="_blank" class="text-blue-400 hover:underline">${app.url ? 'Link' : 'N/A'}</a></td>
-                        <td class="py-2 px-4">${app.dataAnalytics || 'No'}</td>
-                        <td class="py-2 px-4">${app.okta || 'N/A'}</td>
-                        <td class="py-2 px-4">${app.access || 'N/A'}</td>
-                        <td class="py-2 px-4">${app.lrcOwner || 'N/A'}</td>
-                        <td class="py-2 px-4">${app.techOwner || 'N/A'}</td>
-                        <td class="py-2 px-4">${app.costCenter || 'N/A'}</td>
-                        <td class="py-2 px-4">${app.annualSpend || 'N/A'}</td>
-                        <td class="py-2 px-4">${app.userCount || 'N/A'}</td>
-                        <td class="py-2 px-4">${app.notes || 'N/A'}</td>
-                    </tr>
-                `;
+            const numPlanets = galaxyData.length;
+            const angleStep = 360 / numPlanets;
+            
+            // Create SVG container for lines (spokes)
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            svg.style.position = 'absolute';
+            svg.style.top = '0';
+            svg.style.left = '0';
+            svg.style.zIndex = '5';
+            // Insert the SVG element right after the sun (which is absolute z-10)
+            galaxySystem.insertBefore(svg, sun.nextSibling);
+
+            galaxyData.forEach((planetData, index) => {
+                // Calculate angle (start at 90 degrees - straight up, then increment)
+                const angleDeg = 90 + (index * angleStep);
+                const angleRad = angleDeg * (Math.PI / 180);
+
+                // Calculate (x, y) position on the circle (y is inverted in screen coords)
+                const x = centerX + R * Math.cos(angleRad);
+                const y = centerY - R * Math.sin(angleRad);
+                
+                // ROUNDED COORDINATES FOR ALIGNMENT
+                const x_round = Math.round(x);
+                const y_round = Math.round(y);
+
+
+                // 1. Create the connecting line (Sun to Planet Spoke)
+                const line = document.createElementNS(svgNS, 'line');
+                line.setAttribute('x1', centerX);
+                line.setAttribute('y1', centerY);
+                line.setAttribute('x2', x_round); // ROUNDED
+                line.setAttribute('y2', y_round); // ROUNDED
+                line.setAttribute('stroke', 'rgba(255, 255, 255, 0.2)');
+                line.setAttribute('stroke-width', '2');
+                svg.appendChild(line);
+
+                // 2. Create the planet element
+                const planet = document.createElement('div');
+                planet.className = `planet ${planetData.sizeClass}`;
+                
+                // Position the planet absolutely using calculated coordinates
+                planet.style.top = `${y_round}px`; // ROUNDED
+                planet.style.left = `${x_round}px`; // ROUNDED
+                planet.setAttribute('data-system-name', planetData.name); /* Added data attribute */
+
+                // 3. Create the planet's visual body (logo/color)
+                const planetLogo = document.createElement('div');
+                planetLogo.className = `planet-logo ${planetData.colorClass}`;
+                
+                // Conditional rendering for image logo vs. text placeholder
+                if (planetData.isImageLogo) {
+                    // Note: The logo tag no longer contains styling classes, those are now applied to the img element via CSS
+                    planetLogo.innerHTML = planetData.logo;
+                } else {
+                    planetLogo.innerHTML = `<span class="logo-placeholder">${planetData.logo}</span>`;
+                }
+                
+                // 4. Create the name tag
+                const planetName = document.createElement('span');
+                planetName.className = 'planet-name';
+                planetName.textContent = planetData.name;
+                
+                planet.appendChild(planetLogo);
+                planet.appendChild(planetName);
+
+                // 5. Add moons and Moon Spoke lines
+                if (planetData.moons.length > 0) {
+                    const moonPath = document.createElement('div');
+                    moonPath.className = 'moon-path';
+                    
+                    // Since the moon-path is just a 1px container at the planet center, it handles relative positioning
+                    planet.appendChild(moonPath); 
+                    
+                    // Set the counter-clockwise rotation offset in degrees
+                    const rotationOffsetDeg = -30;
+
+                    planetData.moons.forEach((moonData, moonIndex) => {
+                        // Calculate moon's fixed local angle (0 and 180 for 2 moons, plus the -30-degree offset)
+                        const initialAngle = moonIndex * (360 / planetData.moons.length); 
+                        const localAngleDeg = initialAngle + rotationOffsetDeg;
+                        const localAngleRad = localAngleDeg * (Math.PI / 180);
+
+                        // Calculate Moon's absolute center coordinates for SVG line endpoint
+                        // We project R_MOON distance from the planet's absolute center (x, y)
+                        const moon_x_abs = x_round + R_MOON * Math.cos(localAngleRad);
+                        const moon_y_abs = y_round - R_MOON * Math.sin(localAngleRad);
+
+                        // ROUNDED MOON ABSOLUTE COORDINATES
+                        const moon_x_abs_round = Math.round(moon_x_abs);
+                        const moon_y_abs_round = Math.round(moon_y_abs);
+
+                        // Draw Moon Spoke (Planet center to Moon center)
+                        const moon_line = document.createElementNS(svgNS, 'line');
+                        moon_line.setAttribute('x1', x_round); // ROUNDED planet center
+                        moon_line.setAttribute('y1', y_round); // ROUNDED planet center
+                        moon_line.setAttribute('x2', moon_x_abs_round); // ROUNDED moon center
+                        moon_line.setAttribute('y2', moon_y_abs_round); // ROUNDED moon center
+                        moon_line.setAttribute('stroke', 'rgba(255, 255, 255, 0.4)'); 
+                        moon_line.setAttribute('stroke-width', '1');
+                        svg.appendChild(moon_line);
+
+                        // Create the moon element (positioned relative to the moon-path container at planet center)
+                        const moon = document.createElement('div');
+                        moon.className = `moon ${moonData.sizeClass} ${moonData.colorClass}`;
+                        moon.setAttribute('data-system-name', moonData.name); /* Added data attribute */
+
+                        // Calculate moon's position relative to the planet's center point (50% of planet width)
+                        const moon_x_rel = R_MOON * Math.cos(localAngleRad); 
+                        const moon_y_rel = R_MOON * Math.sin(localAngleRad); 
+                        
+                        // Position the moon relative to the 1px moonPath container, which is at the planet's center.
+                        // We round the relative coordinates too for perfect alignment with the planet element's internal rendering.
+                        moon.style.left = `${Math.round(moon_x_rel)}px`;
+                        moon.style.top = `${Math.round(-moon_y_rel)}px`; // Y-axis is inverted in screen coordinates
+
+                        const moonLogo = document.createElement('div');
+                        // Use inline style for 95% width/height to leave a small outline
+                        moonLogo.style.width = '95%';
+                        moonLogo.style.height = '95%';
+                        moonLogo.className = 'rounded-full flex justify-center items-center bg-gray-100 moon-logo'; /* Added moon-logo class for inner shadow */
+                        moonLogo.innerHTML = `<span class="text-xs font-bold text-gray-800">${moonData.logo}</span>`;
+                        
+                        const moonName = document.createElement('span');
+                        moonName.className = 'moon-name';
+                        moonName.textContent = moonData.name;
+
+                        moon.appendChild(moonLogo);
+                        moon.appendChild(moonName);
+                        moonPath.appendChild(moon);
+                    });
+                }
+
+                galaxySystem.appendChild(planet);
             });
-        }
-        tableBody.innerHTML = html;
-    }
 
-    /**
-     * Switches the active content tab.
-     * @param {string} tabId The ID of the tab to activate.
-     */
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.add('hidden');
-        });
-        document.querySelectorAll('.top-nav-item').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        const activeButtons = document.querySelectorAll(`[data-tab="${tabId}"]`);
-        activeButtons.forEach(btn => btn.classList.add('active'));
-
-        const contentElement = document.getElementById(tabId);
-        if (contentElement) {
-            contentElement.classList.remove('hidden');
-        } else {
-            console.error(`Error: Element with ID "${tabId}" not found. Cannot switch tab.`);
-        }
-        
-
-        if (tabId === 'lrc-tech-ecosystem') {
-            renderTable(appData);
-        } else if (tabId === 'marketecture') {
-            renderAppLogos(appData);
-        }
-    }
-    
-    /**
-     * Switches the active sub-tab within a parent tab.
-     * @param {string} tabId The ID of the sub-tab to activate.
-     */
-    function switchSubTab(tabId) {
-        document.querySelectorAll('.sub-tab-content').forEach(tab => {
-            tab.classList.add('hidden');
-        });
-        document.getElementById(tabId).classList.remove('hidden');
-
-        document.querySelectorAll('[data-sub-tab]').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        const activeButtons = document.querySelectorAll(`[data-sub-tab="${tabId}"]`);
-        activeButtons.forEach(btn => btn.classList.add('active'));
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const loadingSpinner = document.getElementById('loading-spinner-container');
-        const welcomeScreen = document.getElementById('loading-text-container');
-        const enterButton = document.getElementById('enter-button');
-
-        const debouncedRenderTable = debounce(renderTable, 300);
-
-        const filterContainer = document.querySelector('#lrc-tech-ecosystem .flex.flex-wrap.gap-4.mb-4');
-        if (filterContainer) {
-            filterContainer.addEventListener('input', () => debouncedRenderTable(appData));
-            filterContainer.addEventListener('change', () => debouncedRenderTable(appData));
-        }
-
-        const clearFiltersBtn = document.getElementById('clear-filters');
-        if (clearFiltersBtn) {
-            clearFiltersBtn.addEventListener('click', () => {
-                document.querySelectorAll('#lrc-tech-ecosystem input, #lrc-tech-ecosystem select').forEach(input => {
-                    input.value = '';
+            // --- HOVER INTERACTION LOGIC ---
+            const interactiveElements = [sun, ...document.querySelectorAll('.planet'), ...document.querySelectorAll('.moon')];
+            
+            interactiveElements.forEach(item => {
+                // Add usage data attributes for convenience
+                const name = item.getAttribute('data-system-name');
+                const data = findSystemData(name);
+                if (data && data.usage) {
+                    // Replace markdown bolding with simple HTML for the tooltip
+                    const usageHtml = data.usage.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    item.setAttribute('data-usage', usageHtml);
+                }
+                
+                item.addEventListener('mouseover', function() {
+                    const usageHtml = this.getAttribute('data-usage');
+                    if (usageHtml) {
+                        showTooltip(this);
+                    }
                 });
-                renderTable(appData);
+                item.addEventListener('mouseout', hideTooltip);
             });
-        }
-        
-        const navBar = document.querySelector('.top-nav');
-        if (navBar) {
-            navBar.addEventListener('click', (e) => {
-                const tabBtn = e.target.closest('.top-nav-item');
-                // Check if the data-tab attribute exists before calling switchTab
-                if (tabBtn && tabBtn.dataset.tab) {
-                    e.preventDefault();
-                    switchTab(tabBtn.dataset.tab);
-                }
-            });
-        }
-        
-        const subTabsContainer = document.getElementById('sub-tabs');
-        if (subTabsContainer) {
-            subTabsContainer.addEventListener('click', (e) => {
-                const subTabBtn = e.target.closest('[data-sub-tab]');
-                if (subTabBtn) {
-                    e.preventDefault();
-                    // Fix: Use camelCase for dataset property access
-                    switchSubTab(subTabBtn.dataset.subTab);
-                }
-            });
-        }
+            // --- END HOVER INTERACTION LOGIC ---
 
-        const marketectureContainer = document.getElementById('marketecture');
-        if (marketectureContainer) {
-            // Use mouseover/mouseout listeners on the container with event delegation
-            marketectureContainer.addEventListener('mouseover', showTooltip);
-            marketectureContainer.addEventListener('mouseout', hideTooltip);
-        }
+        })(); // End IIFE
+    </script>
+</div>
 
-        // Initially show the spinner and hide the welcome text
-        loadingSpinner.classList.remove('hidden');
-        welcomeScreen.classList.add('hidden');
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-
-        // Wait for 12 seconds, then hide the spinner and show the welcome screen
-        setTimeout(() => {
-            if (loadingSpinner) {
-                loadingSpinner.classList.add('hidden');
-            }
-            if (welcomeScreen) {
-                welcomeScreen.classList.remove('hidden');
-            }
-        }, 12000);
-
-        // Handle the button click to enter the portal
-        if (enterButton) {
-            enterButton.addEventListener('click', () => {
-                if (welcomeScreen) {
-                    welcomeScreen.classList.add('hidden');
-                }
-                switchTab('marketecture');
-            });
-        }
-    });
-</script>
+<!-- Simple footer note to explain the visualization -->
+<div class="fixed bottom-0 left-0 right-0 text-center p-4 bg-gray-900 bg-opacity-80 text-gray-400 footer-note">
+    <p>This AI Galaxy visualization maps the Legal Tech Ecosystem around the LRC Core. Hover to see names and click to explore a tool!</p>
+    <p class="mt-1">Platforms with components (moons) indicate native AI applications.</p>
+</div>
 
 </body>
 </html>
+
