@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Legal AI Galaxy Map</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0d111c; }
+
+        /* --- GENERAL STYLING --- */
+        .planet-container {
+            position: absolute;
+            transition: transform 0.3s ease, z-index 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            will-change: transform;
+            z-index: 30;
+        }
+
+        .planet-container:hover {
+            z-index: 100; 
+        }
+
+        /* Styling for the planet spheres */
+        .planet {
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            /* Uniform planet size for the 5 primary tools (130px) */
+            width: 130px;
+            height: 130px;
+            min-width: 130px;
+            min-height: 130px;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.875rem; 
+            line-height: 1.1;
+        }
+
+        /* Small moon size */
+        #p-gems .planet, #p-notebooklm .planet {
+            width: 80px;
+            height: 80px;
+            min-width: 80px;
+            min-height: 80px;
+            font-size: 0.7rem;
+            line-height: 1;
+        }
+
+        /* Hover effect: Subtle scale and intense glow */
+        .planet-container:hover .planet {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px var(--planet-color, #fff), 0 0 80px var(--planet-color, #fff);
+        }
+        
+        /* Central Sun Styling */
+        #sun {
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.5);
+            z-index: 50;
+        }
+
+        /* --- CONNECTORS --- */
+        .sun-connector {
+            position: absolute;
+            background-color: rgba(100, 149, 237, 0.5);
+            height: 2px;
+            transform-origin: 0 0;
+            pointer-events: none;
+            z-index: 15;
+            transition: all 0.5s ease;
+            box-shadow: 0 0 5px rgba(100, 149, 237, 0.8);
+        }
+
+        /* Moon line is distinct */
+        .moon-connector {
+            background-color: rgba(34, 211, 238, 0.7) !important;
+            box-shadow: 0 0 8px rgba(34, 211, 238, 1) !important;
+            z-index: 34; 
+        }
+
+        /* --- IFRAME STYLING --- */
+        .logo-iframe {
+            border: none;
+            border-radius: 50%;
+            width: 80%; /* 80% of .planet-logo-content area */
+            height: 80%;
+            background-color: rgba(255, 255, 255, 0.2); /* Visible placeholder */
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+            pointer-events: none; /* Prevents interference with planet hover */
+        }
+        /* Adjusted iframe size for smaller moon planets */
+        #p-gems .logo-iframe, #p-notebooklm .logo-iframe {
+            width: 70%;
+            height: 70%;
+        }
+
+        /* --- INFO CARD & LABELS --- */
+        .planet-logo-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 60%; 
+        }
+        
+        .info-card {
+            width: 250px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease;
+        }
+        .planet-container:hover .info-card {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .planet-label {
+            font-weight: 600;
+            padding-top: 5px;
+            font-size: 0.875rem;
+        }
+        
+        /* --- DESKTOP LAYOUT (5 EQUIDISTANT PLANETS + 2 MOONS) --- */
+        @media (min-width: 1024px) {
+            .map-container {
+                height: 700px;
+                width: 100%;
+                position: relative;
+            }
+            #sun { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+            /* Default positions for 5 main planets (reverting to a 5-planet orbit) */
+            /* We will use JS to set final positions for ALL elements */
+        }
+
+        /* --- MOBILE LAYOUT (Stacked) --- */
+        @media (max-width: 1023px) {
+            .map-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem;
+                gap: 2rem;
+            }
+            .planet-container {
+                position: relative !important;
+                transform: none !important;
+                top: auto !important;
+                left: auto !important;
+            }
+            .orbit { display: none; } 
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen p-4 lg:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-4xl lg:text-5xl font-extrabold mb-2 text-center text-yellow-300">
+            Corporate Legal AI Galaxy Map
+        </h1>
+        <p class="text-center text-gray-400 mb-8 lg:mb-12">
+            A guide for when and how to leverage your legal AI toolkit. (Host planet + 4 equidistant primary tools.)
+        </p>
+    </div>
+
+    <!-- MAIN MAP CONTAINER --><div class="map-container relative mx-auto overflow-hidden">
+
+        <!-- THE SUN (CENTER OF THE LEGAL ECOSYSTEM) --><div id="sun" class="absolute w-32 h-32 lg:w-40 lg:h-40 rounded-full flex items-center justify-center bg-yellow-500 shadow-2xl shadow-yellow-500/50 z-20 transition-all duration-500">
+            <div class="text-center p-2">
+                <p class="font-bold text-lg text-gray-900 leading-tight">Legal, Regulatory, & Compliance</p>
+                <div class="mt-1 flex justify-center items-center">
+                    <!-- Procore Logo SVG --><svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 0C22.3858 0 0 22.3858 0 50C0 77.6142 22.3858 100 50 100C77.6142 100 100 77.6142 100 50C100 22.3858 77.6142 0 50 0ZM50 18.1818C58.6272 18.1818 65.4545 25.0091 65.4545 33.6364C65.4545 42.2636 58.6272 49.0909 50 49.0909C41.3728 49.0909 34.5455 42.2636 34.5455 33.6364C34.5455 25.0091 41.3728 18.1818 50 18.1818ZM29.0909 60.9091H70.9091C73.9142 60.9091 76.3636 63.3585 76.3636 66.3636V70.9091C76.3636 73.9142 73.9142 76.3636 70.9091 76.3636H29.0909C26.0858 76.3636 23.6364 73.9142 23.6364 70.9091V66.3636C23.6364 63.3585 26.0858 60.9091 29.0909 60.9091Z" fill="#333333"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. Gemini 2.5 Pro (The HOST planet) --><div id="p-gemini-pro" class="planet-container">
+            <div class="planet bg-gradient-to-br from-indigo-700 to-fuchsia-600" style="--planet-color: #f0abfc;">
+                <div class="planet-logo-content">
+                    <iframe class="logo-iframe" src="about:blank" title="Gemini 2.5 Pro Image Slot"></iframe>
+                </div>
+                <p class="planet-label">Gemini 2.5 Pro</p>
+            </div>
+            <div class="info-card absolute mt-4 p-3 bg-gray-800 rounded-lg shadow-xl text-sm">
+                <p class="font-bold text-lg text-fuchsia-300 mb-1">General Intelligence (Host)</p>
+                <p class="text-xs text-gray-300">
+                    <span class="font-semibold">Usage:</span> High-Volume, Complex, Ad-hoc.<br>
+                    <span class="font-semibold">Mission:</span> Summarizing litigation briefs, drafting first-pass internal memos, complex reasoning over external data, advanced prompt engineering.
+                </p>
+            </div>
+        </div>
+
+        <!-- 2. Luminance (Primary) --><div id="p-luminance" class="planet-container">
+            <div class="planet bg-gradient-to-br from-emerald-600 to-teal-700" style="--planet-color: #34d399;">
+                <div class="planet-logo-content">
+                    <iframe class="logo-iframe" src="about:blank" title="Luminance Image Slot"></iframe>
+                </div>
+                <p class="planet-label">Luminance</p>
+            </div>
+            <div class="info-card absolute mt-4 p-3 bg-gray-800 rounded-lg shadow-xl text-sm">
+                <p class="font-bold text-lg text-teal-300 mb-1">Contract Lifecycle Management</p>
+                <p class="text-xs text-gray-300">
+                    <span class="font-semibold">Usage:</span> Contract Review, Drafting, <span class="text-yellow-400 font-bold">Negotiation (Primary Tool)</span>.<br>
+                    <span class="font-semibold">Mission:</span> First-pass analysis, identifying deviations, generating redlines, eDiscovery culling, and full contract negotiation support.
+                </p>
+            </div>
+        </div>
+
+        <!-- 3. Harvey.ai (Primary) --><div id="p-harvey" class="planet-container">
+            <div class="planet bg-gradient-to-br from-blue-600 to-purple-700" style="--planet-color: #a78bfa;">
+                <div class="planet-logo-content">
+                    <iframe class="logo-iframe" src="data:text/html;base64,PGh0bWw+PGJvZHkgc3R5bGU9Im1hcmdpbjowOyBwYWRkaW5nOjA7IGJhY2tncm91bmQtY29sb3I6dHJhbnNwYXJlbnQ7IG92ZXJmbG93OmhpZGRlbiI+PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNNTQuOTY0MyAzNi41NzE0SDQ0LjkwNjJMMzguMjUwIDYyLjY0MjloNC42NDc5TDQzLjI4MzcgNTYuODkyOUg1Ni4zOTg5TDU3LjA4MDQgNjIuNjQyOWg0Ljc2ODhMNTQuOTY0MyAzNi41NzE0WiBNNDguMzc3MiA0Mi4zOTY3TDUzLjQzNTkgNTEuMzc2NUg0My4wODQ5TDRyLjM3NzIgNDIuMzk2N1oiIGZpbGw9IiM2MTZDRjIiLz48L3N2Zz48L2JvZHk+PC9odG1sPg==" title="Harvey.ai Logo Slot"></iframe>
+                </div>
+                <p class="planet-label">Harvey.ai</p>
+            </div>
+            <div class="info-card absolute mt-4 p-3 bg-gray-800 rounded-lg shadow-xl text-sm">
+                <p class="font-bold text-lg text-purple-300 mb-1">Legal Research & Drafting</p>
+                <p class="text-xs text-gray-300">
+                    <span class="font-semibold">Usage:</span> Deep Legal Research, Drafting, Document Analysis.<br>
+                    <span class="font-semibold">Mission:</span> Generating litigation documents, comparing complex legal opinions, custom analytical workflows (excluding contract negotiation).
+                </p>
+            </div>
+        </div>
+
+        <!-- 4. Rovo (Primary) --><div id="p-rovo" class="planet-container">
+            <div class="planet bg-gradient-to-br from-red-600 to-orange-600" style="--planet-color: #f97316;">
+                <div class="planet-logo-content">
+                    <iframe class="logo-iframe" src="about:blank" title="Rovo Image Slot"></iframe>
+                </div>
+                <p class="planet-label">Rovo</p>
+            </div>
+            <div class="info-card absolute mt-4 p-3 bg-gray-800 rounded-lg shadow-xl text-sm">
+                <p class="font-bold text-lg text-orange-400 mb-1">Legal Operations & Search</p>
+                <p class="text-xs text-gray-300">
+                    <span class="font-semibold">Usage:</span> Enterprise Search, Workflow Automation.<br>
+                    <span class="font-semibold">Mission:</span> Finding data across corporate knowledge sources, automating team status reports, triaging compliance requests via AI agents.
+                </p>
+            </div>
+        </div>
+        
+        <!-- 5. Law360 by LexisNexis (Primary) --><div id="p-law360" class="planet-container">
+            <div class="planet bg-gradient-to-br from-pink-600 to-red-800" style="--planet-color: #e31837;">
+                <div class="planet-logo-content">
+                    <iframe class="logo-iframe" src="about:blank" title="Law360 Image Slot"></iframe>
+                </div>
+                <p class="planet-label">Law360</p>
+            </div>
+            <div class="info-card absolute mt-4 p-3 bg-gray-800 rounded-lg shadow-xl text-sm">
+                <p class="font-bold text-lg text-pink-400 mb-1">External Research & News</p>
+                <p class="text-xs text-gray-300">
+                    <span class="font-semibold">Usage:</span> Corporate Legal Research, Templates, News.<br>
+                    <span class="font-semibold">Mission:</span> Accessing up-to-date legal news and filings, utilizing official legal templates, conducting comprehensive jurisdictional research.
+                </p>
+            </div>
+        </div>
+
+        <!-- 6. NotebookLM (MOON of G2.5 Pro) --><div id="p-notebooklm" class="planet-container">
+            <div class="planet bg-gradient-to-br from-amber-500 to-yellow-600" style="--planet-color: #fcd34d;">
+                <div class="planet-logo-content">
+                    <iframe class="logo-iframe" src="about:blank" title="NotebookLM Image Slot"></iframe>
+                </div>
+                <p class="planet-label">NotebookLM</p>
+            </div>
+            <div class="info-card absolute mt-4 p-3 bg-gray-800 rounded-lg shadow-xl text-sm">
+                <p class="font-bold text-lg text-yellow-300 mb-1">Internal Research Hub (Moon)</p>
+                <p class="text-xs text-gray-300">
+                    <span class="font-semibold">Usage:</span> Internal Knowledge Grounding, Synthesis.<br>
+                    <span class="font-semibold">Mission:</span> Analyzing existing case file documents, grounding research in internal policy and precedent, generating summaries of internal data for discovery or due diligence prep.
+                </p>
+            </div>
+        </div>
+
+        <!-- 7. Gemini Gems (MOON of G2.5 Pro) --><div id="p-gems" class="planet-container">
+            <div class="planet bg-gradient-to-br from-cyan-500 to-blue-600" style="--planet-color: #22d3ee;">
+                <div class="planet-logo-content">
+                    <iframe class="logo-iframe" src="about:blank" title="Gemini Gems Image Slot"></iframe>
+                </div>
+                <p class="planet-label">Gemini Gems</p>
+            </div>
+            <div class="info-card absolute mt-4 p-3 bg-gray-800 rounded-lg shadow-xl w-64 text-sm">
+                <p class="font-bold text-lg text-cyan-300 mb-1">Discrete Productivity (Moon)</p>
+                <p class="text-xs text-gray-300">
+                    <span class="font-semibold">Usage:</span> Highly specialized, task-specific, single-focus.<br>
+                    <span class="font-semibold">Mission:</span> Executing tiny, pre-defined workflows (e.g., converting litigation summary to a presentation outline, summarizing specific email threads according to a template).
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile/Tablet Information (Visible only on smaller screens) --><div class="lg:hidden mt-12 space-y-4">
+        <h2 class="text-2xl font-bold text-yellow-300 mb-4">AI Tool Summary (Mobile View)</h2>
+        <!-- Card 1: Gemini 2.5 Pro --><div class="p-4 bg-gray-800 rounded-xl shadow-lg border-l-4 border-fuchsia-600">
+            <p class="font-bold text-xl text-fuchsia-300">Gemini 2.5 Pro</p>
+            <p class="text-sm text-gray-400">**General Intelligence / Complex Reasoning (Host)**</p>
+            <p class="text-sm mt-1">Used for high-volume, complex, ad-hoc analysis, drafting internal memos, and complex reasoning over vast external data.</p>
+        </div>
+        <!-- Card 6: NotebookLM (Moon) --><div class="p-4 bg-gray-800 rounded-xl shadow-lg border-l-4 border-yellow-600 ml-6">
+            <p class="font-bold text-xl text-yellow-300">NotebookLM (Moon)</p>
+            <p class="text-sm text-gray-400">**Internal Research Hub / Knowledge Grounding**</p>
+            <p class="text-sm mt-1">Analyzing existing case file documents, grounding research in internal policy and precedent, generating summaries of internal data.</p>
+        </div>
+        <!-- Card 7: Gemini Gems (Moon) --><div class="p-4 bg-gray-800 rounded-xl shadow-lg border-l-4 border-cyan-400 ml-6">
+            <p class="font-bold text-xl text-cyan-300">Gemini Gems (Moon)</p>
+            <p class="text-sm text-gray-400">**Specialized Productivity Solutions**</p>
+            <p class="text-sm mt-1">Used for highly specialized, single-focus, discrete tasks that require a targeted AI model.</p>
+        </div>
+        <!-- Card 2: Luminance --><div class="p-4 bg-gray-800 rounded-xl shadow-lg border-l-4 border-teal-600">
+            <p class="font-bold text-xl text-teal-300">Luminance</p>
+            <p class="text-sm text-gray-400">**Contract Lifecycle & NEGOTIATION**</p>
+            <p class="text-sm mt-1">The primary tool for end-to-end contract processing, negotiation, first-pass mark-up, and eDiscovery culling.</p>
+        </div>
+        <!-- Card 3: Harvey.ai --><div class="p-4 bg-gray-800 rounded-xl shadow-lg border-l-4 border-purple-600">
+            <p class="font-bold text-xl text-purple-300">Harvey.ai</p>
+            <p class="text-sm text-gray-400">**Legal Research & Drafting (No Negotiation)**</p>
+            <p class="text-sm mt-1">Used for deep legal research, drafting litigation documents, comparing complex legal opinions, custom analytical workflows (excluding contract negotiation).</p>
+        </div>
+        <!-- Card 4: Rovo --><div class="p-4 bg-gray-800 rounded-xl shadow-lg border-l-4 border-red-500">
+            <p class="font-bold text-xl text-red-500">Rovo</p>
+            <p class="text-sm text-gray-400">**Enterprise Search & Workflow Automation**</p>
+            <p class="text-sm mt-1">Used to find data across corporate knowledge sources, automating team status reports, triaging compliance requests via AI agents.</p>
+        </div>
+        <!-- Card 5: Law360 --><div class="p-4 bg-gray-800 rounded-xl shadow-lg border-l-4 border-pink-700">
+            <p class="font-bold text-xl text-pink-400">Law360</p>
+            <p class="text-sm text-gray-400">**External Research & News**</p>
+            <p class="text-sm mt-1">Accessing up-to-date legal news and filings, utilizing official legal templates, conducting comprehensive jurisdictional research.</p>
+        </div>
+    </div>
+
+    <!-- Script to draw the connecting lines and manage hover/resize effects --><script>
+        // --- CONSTANTS ---
+        const PRIMARY_ORBIT_RADIUS_PERCENT = 25; 
+        const MOON_ORBIT_RADIUS = 160; // Distance from host center to moon center
+        
+        const SUN_SIZE_PX = 160; 
+        const SUN_RADIUS_PX = SUN_SIZE_PX / 2;
+        
+        // Host planet size is 130px container, so radius is 65px
+        const HOST_PLANET_RADIUS_PX = 65; 
+        // All non-host/moon planets are 130px container, so radius is 65px
+        const PRIMARY_PLANET_RADIUS_PX = 65; 
+        // Moon planet size is 80px container, so radius is 40px
+        const MOON_RADIUS_PX = 40; 
+
+        // Primary Planets (5): G2.5 Pro (Host), Luminance, Harvey.ai, Rovo, Law360. (360/5 = 72 degrees apart)
+        const PLANET_ANGLES = {
+            'p-gemini-pro': 30,  // Host Planet
+            'p-harvey': 102,     
+            'p-law360': 174,     
+            'p-luminance': 246,  
+            'p-rovo': 318,         
+        };
+
+        // Moon angles relative to the HOST planet (0 degrees is right, 90 is up)
+        const MOON_ANGLES = {
+            'p-notebooklm': 315, // Right and Below (315 degrees is -45, X+, Y+)
+            'p-gems': 45,        // Right and Above (45 degrees is X+, Y+)
+        };
+
+
+        // --- POSITIONING FUNCTIONS ---
+
+        function calculatePlanetPosition(angle, radiusPercent, containerWidth, containerHeight, planetSize) {
+            const angleRad = angle * Math.PI / 180;
+            const centerOffset = containerWidth / 2;
+            const radius = containerWidth * (radiusPercent / 100);
+
+            const centerX = centerOffset;
+            const centerY = containerHeight / 2;
+
+            const x = centerX + radius * Math.cos(angleRad) - (planetSize / 2);
+            const y = centerY - radius * Math.sin(angleRad) - (planetSize / 2);
+
+            return { x, y };
+        }
+        
+        function positionPlanets() {
+            const mapContainer = document.querySelector('.map-container');
+            const containerWidth = mapContainer.clientWidth;
+            const containerHeight = mapContainer.clientHeight;
+            
+            // Position the 5 primary planets
+            const primaryPlanetIds = ['p-gemini-pro', 'p-harvey', 'p-law360', 'p-luminance', 'p-rovo'];
+
+            primaryPlanetIds.forEach(id => {
+                const planetContainer = document.getElementById(id);
+                if (!planetContainer) return;
+                
+                const planetSize = planetContainer.querySelector('.planet').clientWidth; 
+                const angle = PLANET_ANGLES[id];
+                
+                const { x, y } = calculatePlanetPosition(
+                    angle, 
+                    PRIMARY_ORBIT_RADIUS_PERCENT, 
+                    containerWidth, 
+                    containerHeight, 
+                    planetSize
+                );
+
+                planetContainer.style.left = `${x}px`;
+                planetContainer.style.top = `${y}px`;
+                planetContainer.style.visibility = 'visible';
+            });
+        }
+
+        function positionMoon(mainPlanetId, moonPlanetId, moonAngle) {
+            const mainPlanet = document.getElementById(mainPlanetId);
+            const moonPlanet = document.getElementById(moonPlanetId);
+            if (!mainPlanet || !moonPlanet) return;
+            
+            // Get the center coordinates of the main planet relative to the map container
+            const mainRect = mainPlanet.getBoundingClientRect();
+            const mapContainer = document.querySelector('.map-container');
+            const containerRect = mapContainer.getBoundingClientRect();
+
+            const mainCenterX = mainRect.left + mainRect.width / 2 - containerRect.left;
+            const mainCenterY = mainRect.top + mainRect.height / 2 - containerRect.top;
+
+            // Position the moon relative to the main planet center
+            const moonAngleRad = moonAngle * Math.PI / 180;
+
+            const moonOffsetX = MOON_ORBIT_RADIUS * Math.cos(moonAngleRad);
+            const moonOffsetY = MOON_ORBIT_RADIUS * Math.sin(moonAngleRad);
+
+            // Calculate the moon's position (center of moon) and offset by half its size
+            const moonWidth = moonPlanet.clientWidth;
+            
+            // Apply absolute positioning relative to the map container
+            moonPlanet.style.left = `${mainCenterX + moonOffsetX - moonWidth / 2}px`;
+            // Standard canvas Y (Y+ is DOWN). The angle handles the direction (45 deg = up/left, 315 deg = down/right).
+            moonPlanet.style.top = `${mainCenterY - moonOffsetY - moonWidth / 2}px`; 
+            
+            moonPlanet.style.visibility = 'visible'; 
+        }
+
+        // --- CONNECTOR FUNCTIONS ---
+
+        function drawConnectorLine(startElement, endElement, lineId, isMoonConnector = false) {
+            const mapContainer = document.querySelector('.map-container');
+            const containerRect = mapContainer.getBoundingClientRect();
+
+            const startRect = startElement.getBoundingClientRect();
+            const endRect = endElement.getBoundingClientRect();
+            
+            // Determine Radii
+            const startRadius = isMoonConnector ? HOST_PLANET_RADIUS_PX : SUN_RADIUS_PX;
+            const endRadius = isMoonConnector ? MOON_RADIUS_PX : PRIMARY_PLANET_RADIUS_PX;
+
+            // Centers relative to container
+            const startX_Center = startRect.left + startRect.width / 2 - containerRect.left;
+            const startY_Center = startRect.top + startRect.height / 2 - containerRect.top;
+            const endX_Center = endRect.left + endRect.width / 2 - containerRect.left;
+            const endY_Center = endRect.top + endRect.height / 2 - containerRect.top;
+
+            const dx = endX_Center - startX_Center;
+            const dy = endY_Center - startY_Center;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx); // Angle in radians
+            
+            // Calculate start point on the perimeter
+            const startX_Edge = startX_Center + startRadius * Math.cos(angle);
+            const startY_Edge = startY_Center + startRadius * Math.sin(angle);
+            
+            // Calculate line properties
+            const finalDistance = distance - startRadius - endRadius; 
+            
+            let line = document.getElementById(lineId);
+            if (!line) {
+                line = document.createElement('div');
+                line.id = lineId;
+                line.className = isMoonConnector ? 'sun-connector moon-connector' : 'sun-connector';
+                mapContainer.prepend(line);
+            }
+
+            // Apply styles
+            line.style.width = `${finalDistance}px`;
+            line.style.transform = `rotate(${angle * 180 / Math.PI}deg)`;
+            line.style.left = `${startX_Edge}px`;
+            line.style.top = `${startY_Edge}px`;
+        }
+
+        function drawConnectors() {
+            const sun = document.getElementById('sun');
+            if (!sun || window.innerWidth < 1024) return;
+            
+            const mainPlanetIds = ['p-gemini-pro', 'p-harvey', 'p-law360', 'p-luminance', 'p-rovo'];
+
+            // 1. Connect Main Planets to Sun (perimeter-to-perimeter)
+            mainPlanetIds.forEach(id => {
+                const planet = document.getElementById(id);
+                if (planet) {
+                    drawConnectorLine(sun, planet, `line-for-${id}`, false); // isMoonConnector=false
+                }
+            });
+
+            // 2. Connect Moons to Main Planet (Gemini 2.5 Pro) - perimeter-to-perimeter
+            const hostPlanet = document.getElementById('p-gemini-pro');
+            const moonIds = ['p-notebooklm', 'p-gems'];
+
+            moonIds.forEach(id => {
+                const moon = document.getElementById(id);
+                if (moon && hostPlanet) {
+                     drawConnectorLine(hostPlanet, moon, `line-for-${id}-moon`, true); // isMoonConnector=true
+                }
+            });
+        }
+
+        // --- INITIALIZATION ---
+
+        function initMap() {
+            const isDesktop = window.innerWidth >= 1024;
+            
+            document.querySelectorAll('.sun-connector').forEach(line => line.remove());
+
+            if (isDesktop) {
+                // 1. Position the 5 primary planets (equidistant)
+                positionPlanets();
+
+                // 2. Position the 2 Moons (relative to G2.5 Pro)
+                Object.keys(MOON_ANGLES).forEach(id => {
+                    positionMoon('p-gemini-pro', id, MOON_ANGLES[id]);
+                });
+
+                // 3. Draw all connectors (perimeter-to-perimeter)
+                drawConnectors(); 
+            }
+        }
+        
+        function handlePlanetInteractions() {
+             document.querySelectorAll('.planet-container').forEach(container => {
+                const infoCard = container.querySelector('.info-card');
+                if (infoCard) {
+                    if (window.innerWidth >= 1024) {
+                         infoCard.style.position = 'absolute';
+                         infoCard.style.top = '100%';
+                         infoCard.style.left = '50%';
+                         infoCard.style.transform = 'translateX(-50%)';
+                    }
+                }
+            });
+        }
+
+        window.onload = () => {
+             initMap();
+             handlePlanetInteractions();
+        }
+        window.onresize = initMap;
+    </script>
+</body>
+</html>
