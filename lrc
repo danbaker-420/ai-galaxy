@@ -290,8 +290,9 @@
                     name: "Rovo", 
                     colorClass: "color-orange", 
                     sizeClass: "size-md", 
-                    logo: "R",
-                    isImageLogo: false,
+                    // ADDED LOGO URL
+                    logo: `<img src="https://logo.clearbit.com/www.atlassian.com" onerror="this.src='https://placehold.co/100x100/ea580c/ffffff?text=R';" alt="Rovo Logo">`,
+                    isImageLogo: true,
                     usage: "Used for **internal knowledge retrieval**, answering employee questions instantly by searching across internal documents (policies, playbooks, forms).",
                     moons: []
                 },
@@ -383,180 +384,196 @@
                 tooltip.style.pointerEvents = 'none';
             }
 
-
-            // Configuration for static radial map - now using relative units based on container size
-            
-            // Get the actual runtime size of the container (in pixels, which is needed for SVG coordinates)
-            const size = galaxySystem.offsetWidth;
-            const centerX = Math.round(size / 2); // ROUNDED
-            const centerY = Math.round(size / 2); // ROUNDED
-            
-            // R (Radius): 40% of the container width/height (was 400px of 1000px)
-            const R = size * 0.40; 
-            
-            // R_MOON (Moon distance): 20% of the container width/height (was 200px of 1000px)
-            const R_MOON = size * 0.20; 
-
-            const numPlanets = galaxyData.length;
-            const angleStep = 360 / numPlanets;
-            
-            // Create SVG container for lines (spokes)
-            const svgNS = "http://www.w3.org/2000/svg";
-            const svg = document.createElementNS(svgNS, 'svg');
-            svg.setAttribute('width', '100%');
-            svg.setAttribute('height', '100%');
-            svg.style.position = 'absolute';
-            svg.style.top = '0';
-            svg.style.left = '0';
-            svg.style.zIndex = '5';
-            // Insert the SVG element right after the sun (which is absolute z-10)
-            galaxySystem.insertBefore(svg, sun.nextSibling);
-
-            galaxyData.forEach((planetData, index) => {
-                // Calculate angle (start at 90 degrees - straight up, then increment)
-                const angleDeg = 90 + (index * angleStep);
-                const angleRad = angleDeg * (Math.PI / 180);
-
-                // Calculate (x, y) position on the circle (y is inverted in screen coords)
-                const x = centerX + R * Math.cos(angleRad);
-                const y = centerY - R * Math.sin(angleRad);
-                
-                // ROUNDED COORDINATES FOR ALIGNMENT
-                const x_round = Math.round(x);
-                const y_round = Math.round(y);
-
-
-                // 1. Create the connecting line (Sun to Planet Spoke)
-                const line = document.createElementNS(svgNS, 'line');
-                line.setAttribute('x1', centerX);
-                line.setAttribute('y1', centerY);
-                line.setAttribute('x2', x_round); // ROUNDED
-                line.setAttribute('y2', y_round); // ROUNDED
-                line.setAttribute('stroke', 'rgba(255, 255, 255, 0.2)');
-                line.setAttribute('stroke-width', '2');
-                svg.appendChild(line);
-
-                // 2. Create the planet element
-                const planet = document.createElement('div');
-                planet.className = `planet ${planetData.sizeClass}`;
-                
-                // Position the planet absolutely using calculated coordinates
-                planet.style.top = `${y_round}px`; // ROUNDED
-                planet.style.left = `${x_round}px`; // ROUNDED
-                planet.setAttribute('data-system-name', planetData.name); /* Added data attribute */
-
-                // 3. Create the planet's visual body (logo/color)
-                const planetLogo = document.createElement('div');
-                planetLogo.className = `planet-logo ${planetData.colorClass}`;
-                
-                // Conditional rendering for image logo vs. text placeholder
-                if (planetData.isImageLogo) {
-                    // Note: The logo tag no longer contains styling classes, those are now applied to the img element via CSS
-                    planetLogo.innerHTML = planetData.logo;
-                } else {
-                    planetLogo.innerHTML = `<span class="logo-placeholder">${planetData.logo}</span>`;
+            /**
+             * Removes all dynamically generated elements (planets, moons, SVG lines).
+             */
+            function clearGalaxy() {
+                // Remove existing SVG element
+                const existingSvg = galaxySystem.querySelector('svg');
+                if (existingSvg) {
+                    existingSvg.remove();
                 }
-                
-                // 4. Create the name tag
-                const planetName = document.createElement('span');
-                planetName.className = 'planet-name';
-                planetName.textContent = planetData.name;
-                
-                planet.appendChild(planetLogo);
-                planet.appendChild(planetName);
+                // Remove existing planets and moons (everything except the sun/core)
+                const planets = galaxySystem.querySelectorAll('.planet');
+                planets.forEach(p => p.remove());
+            }
 
-                // 5. Add moons and Moon Spoke lines
-                if (planetData.moons.length > 0) {
-                    const moonPath = document.createElement('div');
-                    moonPath.className = 'moon-path';
+            /**
+             * Calculates dimensions and redraws the entire galaxy system.
+             */
+            function recalculateGalaxy() {
+                clearGalaxy(); // Clear old elements before redrawing
+
+                // Get the actual runtime size of the container (in pixels)
+                const size = galaxySystem.offsetWidth;
+                const centerX = Math.round(size / 2); // ROUNDED
+                const centerY = Math.round(size / 2); // ROUNDED
+                
+                // R (Radius): 40% of the container width/height
+                const R = size * 0.40; 
+                
+                // R_MOON (Moon distance): 20% of the container width/height
+                const R_MOON = size * 0.20; 
+
+                const numPlanets = galaxyData.length;
+                const angleStep = 360 / numPlanets;
+                
+                // Create SVG container for lines (spokes)
+                const svgNS = "http://www.w3.org/2000/svg";
+                const svg = document.createElementNS(svgNS, 'svg');
+                svg.setAttribute('width', '100%');
+                svg.setAttribute('height', '100%');
+                svg.style.position = 'absolute';
+                svg.style.top = '0';
+                svg.style.left = '0';
+                svg.style.zIndex = '5';
+                galaxySystem.insertBefore(svg, sun.nextSibling);
+
+                galaxyData.forEach((planetData, index) => {
+                    // Calculate angle (start at 90 degrees - straight up, then increment)
+                    const angleDeg = 90 + (index * angleStep);
+                    const angleRad = angleDeg * (Math.PI / 180);
+
+                    // Calculate (x, y) position on the circle
+                    const x = centerX + R * Math.cos(angleRad);
+                    const y = centerY - R * Math.sin(angleRad);
                     
-                    // Since the moon-path is just a 1px container at the planet center, it handles relative positioning
-                    planet.appendChild(moonPath); 
+                    // ROUNDED COORDINATES FOR ALIGNMENT
+                    const x_round = Math.round(x);
+                    const y_round = Math.round(y);
+
+
+                    // 1. Create the connecting line (Sun to Planet Spoke)
+                    const line = document.createElementNS(svgNS, 'line');
+                    line.setAttribute('x1', centerX);
+                    line.setAttribute('y1', centerY);
+                    line.setAttribute('x2', x_round);
+                    line.setAttribute('y2', y_round);
+                    line.setAttribute('stroke', 'rgba(255, 255, 255, 0.2)');
+                    line.setAttribute('stroke-width', '2');
+                    svg.appendChild(line);
+
+                    // 2. Create the planet element
+                    const planet = document.createElement('div');
+                    planet.className = `planet ${planetData.sizeClass}`;
                     
-                    // Set the counter-clockwise rotation offset in degrees
-                    const rotationOffsetDeg = -30;
+                    // Position the planet absolutely using calculated coordinates
+                    planet.style.top = `${y_round}px`;
+                    planet.style.left = `${x_round}px`;
+                    planet.setAttribute('data-system-name', planetData.name); 
 
-                    planetData.moons.forEach((moonData, moonIndex) => {
-                        // Calculate moon's fixed local angle (0 and 180 for 2 moons, plus the -30-degree offset)
-                        const initialAngle = moonIndex * (360 / planetData.moons.length); 
-                        const localAngleDeg = initialAngle + rotationOffsetDeg;
-                        const localAngleRad = localAngleDeg * (Math.PI / 180);
-
-                        // Calculate Moon's absolute center coordinates for SVG line endpoint
-                        // We project R_MOON distance from the planet's absolute center (x, y)
-                        const moon_x_abs = x_round + R_MOON * Math.cos(localAngleRad);
-                        const moon_y_abs = y_round - R_MOON * Math.sin(localAngleRad);
-
-                        // ROUNDED MOON ABSOLUTE COORDINATES
-                        const moon_x_abs_round = Math.round(moon_x_abs);
-                        const moon_y_abs_round = Math.round(moon_y_abs);
-
-                        // Draw Moon Spoke (Planet center to Moon center)
-                        const moon_line = document.createElementNS(svgNS, 'line');
-                        moon_line.setAttribute('x1', x_round); // ROUNDED planet center
-                        moon_line.setAttribute('y1', y_round); // ROUNDED planet center
-                        moon_line.setAttribute('x2', moon_x_abs_round); // ROUNDED moon center
-                        moon_line.setAttribute('y2', moon_y_abs_round); // ROUNDED moon center
-                        moon_line.setAttribute('stroke', 'rgba(255, 255, 255, 0.4)'); 
-                        moon_line.setAttribute('stroke-width', '1');
-                        svg.appendChild(moon_line);
-
-                        // Create the moon element (positioned relative to the moon-path container at planet center)
-                        const moon = document.createElement('div');
-                        moon.className = `moon ${moonData.sizeClass} ${moonData.colorClass}`;
-                        moon.setAttribute('data-system-name', moonData.name); /* Added data attribute */
-
-                        // Calculate moon's position relative to the planet's center point (50% of planet width)
-                        const moon_x_rel = R_MOON * Math.cos(localAngleRad); 
-                        const moon_y_rel = R_MOON * Math.sin(localAngleRad); 
-                        
-                        // Position the moon relative to the 1px moonPath container, which is at the planet's center.
-                        // We round the relative coordinates too for perfect alignment with the planet element's internal rendering.
-                        moon.style.left = `${Math.round(moon_x_rel)}px`;
-                        moon.style.top = `${Math.round(-moon_y_rel)}px`; // Y-axis is inverted in screen coordinates
-
-                        const moonLogo = document.createElement('div');
-                        // Use inline style for 95% width/height to leave a small outline
-                        moonLogo.style.width = '95%';
-                        moonLogo.style.height = '95%';
-                        moonLogo.className = 'rounded-full flex justify-center items-center bg-gray-100 moon-logo'; /* Added moon-logo class for inner shadow */
-                        moonLogo.innerHTML = `<span class="text-xs font-bold text-gray-800">${moonData.logo}</span>`;
-                        
-                        const moonName = document.createElement('span');
-                        moonName.className = 'moon-name';
-                        moonName.textContent = moonData.name;
-
-                        moon.appendChild(moonLogo);
-                        moon.appendChild(moonName);
-                        moonPath.appendChild(moon);
-                    });
-                }
-
-                galaxySystem.appendChild(planet);
-            });
-
-            // --- HOVER INTERACTION LOGIC ---
-            const interactiveElements = [sun, ...document.querySelectorAll('.planet'), ...document.querySelectorAll('.moon')];
-            
-            interactiveElements.forEach(item => {
-                // Add usage data attributes for convenience
-                const name = item.getAttribute('data-system-name');
-                const data = findSystemData(name);
-                if (data && data.usage) {
-                    // Replace markdown bolding with simple HTML for the tooltip
-                    const usageHtml = data.usage.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                    item.setAttribute('data-usage', usageHtml);
-                }
-                
-                item.addEventListener('mouseover', function() {
-                    const usageHtml = this.getAttribute('data-usage');
-                    if (usageHtml) {
-                        showTooltip(this);
+                    // 3. Create the planet's visual body (logo/color)
+                    const planetLogo = document.createElement('div');
+                    planetLogo.className = `planet-logo ${planetData.colorClass}`;
+                    
+                    if (planetData.isImageLogo) {
+                        planetLogo.innerHTML = planetData.logo;
+                    } else {
+                        planetLogo.innerHTML = `<span class="logo-placeholder">${planetData.logo}</span>`;
                     }
+                    
+                    // 4. Create the name tag
+                    const planetName = document.createElement('span');
+                    planetName.className = 'planet-name';
+                    planetName.textContent = planetData.name;
+                    
+                    planet.appendChild(planetLogo);
+                    planet.appendChild(planetName);
+
+                    // 5. Add moons and Moon Spoke lines
+                    if (planetData.moons.length > 0) {
+                        const moonPath = document.createElement('div');
+                        moonPath.className = 'moon-path';
+                        
+                        planet.appendChild(moonPath); 
+                        
+                        // Set the counter-clockwise rotation offset in degrees
+                        const rotationOffsetDeg = -30;
+
+                        planetData.moons.forEach((moonData, moonIndex) => {
+                            // Calculate moon's fixed local angle (0 and 180 for 2 moons, plus the -30-degree offset)
+                            const initialAngle = moonIndex * (360 / planetData.moons.length); 
+                            const localAngleDeg = initialAngle + rotationOffsetDeg;
+                            const localAngleRad = localAngleDeg * (Math.PI / 180);
+
+                            // Calculate Moon's absolute center coordinates for SVG line endpoint
+                            const moon_x_abs = x_round + R_MOON * Math.cos(localAngleRad);
+                            const moon_y_abs = y_round - R_MOON * Math.sin(localAngleRad);
+
+                            // ROUNDED MOON ABSOLUTE COORDINATES
+                            const moon_x_abs_round = Math.round(moon_x_abs);
+                            const moon_y_abs_round = Math.round(moon_y_abs);
+
+                            // Draw Moon Spoke (Planet center to Moon center)
+                            const moon_line = document.createElementNS(svgNS, 'line');
+                            moon_line.setAttribute('x1', x_round); // ROUNDED planet center
+                            moon_line.setAttribute('y1', y_round); // ROUNDED planet center
+                            moon_line.setAttribute('x2', moon_x_abs_round); // ROUNDED moon center
+                            moon_line.setAttribute('y2', moon_y_abs_round); // ROUNDED moon center
+                            moon_line.setAttribute('stroke', 'rgba(255, 255, 255, 0.4)'); 
+                            moon_line.setAttribute('stroke-width', '1');
+                            svg.appendChild(moon_line);
+
+                            // Create the moon element (positioned relative to the moon-path container at planet center)
+                            const moon = document.createElement('div');
+                            moon.className = `moon ${moonData.sizeClass} ${moonData.colorClass}`;
+                            moon.setAttribute('data-system-name', moonData.name); 
+
+                            // Calculate moon's position relative to the planet's center point (50% of planet width)
+                            const moon_x_rel = R_MOON * Math.cos(localAngleRad); 
+                            const moon_y_rel = R_MOON * Math.sin(localAngleRad); 
+                            
+                            // Position the moon relative to the 1px moonPath container.
+                            moon.style.left = `${Math.round(moon_x_rel)}px`;
+                            moon.style.top = `${Math.round(-moon_y_rel)}px`; // Y-axis is inverted
+
+                            const moonLogo = document.createElement('div');
+                            moonLogo.style.width = '95%';
+                            moonLogo.style.height = '95%';
+                            moonLogo.className = 'rounded-full flex justify-center items-center bg-gray-100 moon-logo';
+                            moonLogo.innerHTML = `<span class="text-xs font-bold text-gray-800">${moonData.logo}</span>`;
+                            
+                            const moonName = document.createElement('span');
+                            moonName.className = 'moon-name';
+                            moonName.textContent = moonData.name;
+
+                            moon.appendChild(moonLogo);
+                            moon.appendChild(moonName);
+                            moonPath.appendChild(moon);
+                        });
+                    }
+
+                    galaxySystem.appendChild(planet);
                 });
-                item.addEventListener('mouseout', hideTooltip);
-            });
-            // --- END HOVER INTERACTION LOGIC ---
+                
+                // --- HOVER INTERACTION LOGIC ---
+                // Re-attach listeners to the newly created elements
+                const sunElement = document.querySelector('.sun');
+                const interactiveElements = [sunElement, ...document.querySelectorAll('.planet'), ...document.querySelectorAll('.moon')];
+                
+                interactiveElements.forEach(item => {
+                    const name = item.getAttribute('data-system-name');
+                    const data = findSystemData(name);
+                    if (data && data.usage) {
+                        const usageHtml = data.usage.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        item.setAttribute('data-usage', usageHtml);
+                    }
+                    
+                    item.addEventListener('mouseover', function() {
+                        const usageHtml = this.getAttribute('data-usage');
+                        if (usageHtml) {
+                            showTooltip(this);
+                        }
+                    });
+                    item.addEventListener('mouseout', hideTooltip);
+                });
+                // --- END HOVER INTERACTION LOGIC ---
+            } // End recalculateGalaxy function
+
+            // Initial Draw
+            document.addEventListener('DOMContentLoaded', recalculateGalaxy);
+            // Redraw on Resize
+            window.addEventListener('resize', recalculateGalaxy);
 
         })(); // End IIFE
     </script>
@@ -570,4 +587,3 @@
 
 </body>
 </html>
-
