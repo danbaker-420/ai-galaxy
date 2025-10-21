@@ -11,12 +11,21 @@
             font-family: 'Inter', sans-serif;
             background-color: #0d1117; /* GitHub Dark Background */
             color: #ffffff;
-            /* Ensure the body uses the full viewport height/width */
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden; 
+            /* UPDATED: Allow scrolling for the matrix section */
+            height: auto; 
+            min-height: 100vh;
+            overflow-y: auto; /* Allow vertical scrolling */
+            display: block; /* Change from flex to block */
+            padding: 2rem 0; /* Add vertical padding */
+        }
+
+        /* Container for the entire visualization/matrix content */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
         }
 
@@ -42,6 +51,34 @@
             color: #ffc107;
             margin-bottom: 0.5rem;
         }
+        
+        /* Styles for the off-canvas cheat sheet panel (Starts off-screen) */
+        #cheat-sheet-panel {
+            /* Tailwind classes manage width/position/color, but we need the transition state here */
+            transform: translateX(100%);
+            transition: transform 0.5s ease-in-out;
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            z-index: 50;
+            background-color: #111827; /* Darker than body */
+            border-left: 2px solid #e65100;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            width: 90%; /* Default for mobile */
+            overflow-y: auto; /* Ensures scrolling works for long content */
+        }
+        
+        /* Open state */
+        #cheat-sheet-panel.open {
+            transform: translateX(0);
+        }
+
+        @media (min-width: 768px) {
+             #cheat-sheet-panel {
+                width: 35%; /* Wider on desktop */
+             }
+        }
 
 
         /* Container for the solar system - Now uses viewport units for responsiveness */
@@ -53,6 +90,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-bottom: 5rem; /* Space below the galaxy */
         }
         
         /* Define base size in VW for responsive scaling */
@@ -90,21 +128,13 @@
         .sun:hover {
             filter: brightness(1.2); /* Haptic effect: Makes it slightly brighter on hover */
         }
-        .sun-label {
-            line-height: 1.2;
-            font-size: 1.8vmin; /* Responsive font size */
-            white-space: nowrap;
-        }
-        .sun-icon {
-            font-size: 3vmin; /* Responsive icon size */
-            margin-bottom: 0.25vmin;
-        }
+        /* The sun's content is now styled inline to guarantee fitting */
 
         /* --- PLANET STYLING AND POSITIONING (Static) --- */
         .planet {
             position: absolute;
             transform: translate(-50%, -50%); 
-            cursor: default; /* Change cursor back since it's now hover text */
+            cursor: pointer; /* Changed cursor to pointer for click interaction */
             transition: transform 0.3s ease, filter 0.2s ease; /* Added filter transition for hover */
             display: flex;
             flex-direction: column;
@@ -113,9 +143,10 @@
             text-align: center;
             padding: 5px;
             font-weight: 600;
-            /* Enhanced Outer Shadow: Stronger drop shadow for lift */
-            box-shadow: 0 1vmin 3vmin rgba(0, 0, 0, 0.6); 
-            border: 0.2vmin solid rgba(255, 255, 255, 0.2);
+            /* Adjusted Outer Shadow: Slightly reduced for a lighter feel */
+            box-shadow: 0 0.8vmin 2.5vmin rgba(0, 0, 0, 0.5); 
+            /* ADJUSTED: Thinner border from 0.2vmin to 0.1vmin */
+            border: 0.1vmin solid rgba(255, 255, 255, 0.2); 
             z-index: 15;
         }
 
@@ -135,11 +166,13 @@
         }
 
         .planet-logo img {
-            width: 90%; 
-            height: 90%;
+            /* UPDATED: Set to 97% for a very thin colored ring */
+            width: 97%; 
+            height: 97%; 
             object-fit: contain; 
+            /* CHANGE: Make the logo circular to prevent square corners from clipping through the thin border */
             border-radius: 50%; 
-            padding: 0.5vmin; /* Responsive padding */
+            padding: 0.5vmin; /* Adjusted padding to ensure visibility of the colored ring */
         }
 
         .planet-name {
@@ -186,7 +219,7 @@
         .moon {
             position: absolute;
             transform: translate(-50%, -50%); 
-            cursor: default; /* Change cursor back since it's now hover text */
+            cursor: pointer; /* Changed cursor to pointer for click interaction */
             transition: transform 0.3s ease, filter 0.2s ease; /* Added filter transition for hover */
             display: flex;
             justify-content: center;
@@ -199,8 +232,21 @@
         }
 
         .moon-logo {
+            /* FIX: Added border-radius: 50% to ensure circular logo for moons */
+            border-radius: 50%; /* Ensure the container for moon content is circular */
             /* Enhanced Inner Shadow for moons */
             box-shadow: inset 0 0 0.5vmin rgba(0, 0, 0, 0.3), inset 0 0 0.5vmin rgba(255, 255, 255, 0.2); 
+            overflow: hidden; /* Hide anything outside the circle */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .moon-logo img {
+            width: 95%; 
+            height: 95%; 
+            object-fit: contain; 
+            border-radius: 50%; /* Force the image itself into a circle */
         }
 
         .moon:hover {
@@ -227,87 +273,274 @@
             line-height: 1;
         }
 
-        /* Mobile Optimization: Ensure footer text doesn't overlap on tiny screens */
-        .footer-note {
-            font-size: 0.8rem;
-            padding: 0.5rem;
+        /* Matrix specific CSS */
+        .matrix-table {
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 auto;
         }
-        @media (max-width: 600px) {
-            .footer-note p {
-                line-height: 1.3;
-            }
+        .matrix-table div.grid {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        .matrix-table div {
+            padding: 0.75rem;
+            /* Ensure text wrapping in use case column on small screens */
+            word-break: break-word;
+        }
+        /* Matrix Logo Styling */
+        .matrix-table img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 50%; /* Keep circular look for logos */
         }
     </style>
 </head>
 <body>
 
+<div class="main-container">
+
 <!-- Tooltip element added for hover text -->
 <div id="tooltip"></div>
+
+<!-- NEW INTRODUCTORY TEXT (MOVED FROM FOOTER) -->
+<div class="text-center p-6 bg-gray-900 bg-opacity-80 text-gray-400 w-full max-w-xl rounded-lg mb-10 mt-4 shadow-xl">
+    <p class="text-lg font-bold text-yellow-400">AI Legal Tech Galaxy</p>
+    <p class="mt-2 text-sm">This visualization maps the Legal Tech Ecosystem around the LRC Core. **Hover over planets/moons to see usage descriptions, and click them for the detailed In-House When to Use Guide!**</p>
+    <p class="mt-1 text-xs">Platforms with components (moons) indicate native AI applications.</p>
+</div>
+
 
 <!-- Main Galaxy Visualization Container -->
 <div id="galaxy-system">
     
     <!-- Sun/Core -->
     <div class="sun" id="sun-core" data-system-name="Legal, Regulatory, & Compliance Core">
-        <span class="sun-icon">⚖️</span>
-        <div class="sun-label">Legal, Regulatory, & Compliance</div>
+        <div class="text-center flex flex-col justify-center items-center h-full w-full">
+            <!-- New Image Logo -->
+            <img 
+                src="https://companieslogo.com/img/orig/PCOR-33258035.png?t=1720244493" 
+                onerror="this.onerror=null;this.src='https://placehold.co/100x100/e65100/111827?text=LRC';" 
+                alt="PCOR Logo" 
+                style="max-width: 60%; max-height: 60%; object-fit: contain; margin-bottom: 0.25vmin; border-radius: 4px;"
+            >
+            <!-- Full Name (Text adjusted to fit) -->
+            <div style="font-size: 1.1vmin; font-weight: 600; line-height: 1.1; padding: 0 0.25vmin; white-space: normal;">Legal, Regulatory, & Compliance</div>
+        </div>
     </div>
 
     <script>
         // Start IIFE to contain variable scope and prevent global redeclaration errors
         (function() {
-            // Updated galaxyData with usage descriptions
+            
+            // Define the master set of use cases for matrix rows
+            const masterUseCases = {
+                LR: "Legal Research & Precedent Analysis",
+                CR: "Contract Review & Due Diligence",
+                RM: "Regulatory & Competitive Monitoring",
+                IK: "Internal Knowledge & Policy Q&A",
+                CD: "Complex Drafting & Workflow Automation",
+                SD: "Secure Data & Privileged Review",
+            };
+
+            // Define the shared logo content for Gemini Gems and NotebookLM
+            const sharedGeminiMoonLogo = `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYM-_oCfjiysWdSUR-8tzX8fUEtcdTo1naJg&s" onerror="this.onerror=null;this.src='https://placehold.co/100x100/0284c7/ffffff?text=GM';" alt="Gemini Moon Logo">`;
+
+            // Updated galaxyData with usage descriptions, cheat sheet outlines, and capabilities for the matrix
             const galaxyData = [
                 {
                     name: "Harvey.ai", 
                     colorClass: "color-purple", 
-                    sizeClass: "size-md", 
+                    sizeClass: "size-lg", 
                     logo: `<img src="https://logo.clearbit.com/www.harvey.ai" onerror="this.src='https://placehold.co/100x100/7e22ce/ffffff?text=H';" alt="Harvey.ai Logo">`,
                     isImageLogo: true, 
-                    usage: "Used for rapid **legal research, summarizing case law**, and drafting initial documents like memos and motions based on proprietary firm knowledge.",
+                    usage: "Used for rapid **legal research, summarizing case law**, and drafting initial documents like memos and motions based on proprietary firm knowledge. Click for the full **In-House When to Use Guide**.",
+                    capabilities: { LR: true, CD: true },
+                    cheatSheet: {
+                        title: "AI-Powered Legal Research and Drafting",
+                        sections: [
+                            {
+                                heading: "Research & Memo Generation",
+                                points: ["Draft first-pass legal memos (e.g., risk assessment memos, litigation strategy summaries) based on proprietary corporate knowledge and external case law.", "Generate instant summaries of complex judicial opinions or new regulatory filings, providing quick internal counsel on impact and strategy."]
+                            },
+                            {
+                                heading: "Precedent Analysis",
+                                points: ["Identify and extract relevant clauses, holdings, and precedents from the company’s internal contract/litigation history.", "Use AI to compare current legal issues against past company outcomes to forecast likely results and advise on litigation risk."]
+                            },
+                            {
+                                heading: "Litigation & E-Discovery Support",
+                                points: ["Automate the drafting of procedural documents (e.g., standard discovery responses, initial case management briefs).", "Rapidly analyze large volumes of litigation documents to surface key facts, privileged communications, and potentially responsive materials for early case assessment.", "Use AI to synthesize deposition transcripts and cross-reference witness testimony against document production."]
+                            }
+                        ]
+                    },
                     moons: []
                 },
                 {
-                    name: "Law360", 
+                    name: "Law360 by LexisNexis", 
                     colorClass: "color-red", 
-                    sizeClass: "size-md", 
-                    logo: "L360",
-                    isImageLogo: false,
-                    usage: "Used for **daily news aggregation**, staying current on regulatory changes, and tracking competitor litigation in specific jurisdictions.",
+                    sizeClass: "size-lg", 
+                    logo: `<img src="https://www.law360.com/images/law360-stacked.png" onerror="this.src='https://placehold.co/100x100/dc2626/ffffff?text=L360';" alt="Law360 Logo">`,
+                    isImageLogo: true, 
+                    usage: "Used for **daily news aggregation**, staying current on regulatory changes, and tracking competitor litigation in specific jurisdictions. Click for the full **In-House When to Use Guide**.",
+                    capabilities: { RM: true },
+                    cheatSheet: {
+                        title: "Competitive Intelligence & Regulatory Monitoring",
+                        sections: [
+                            {
+                                heading: "Competitive & Litigation Tracking",
+                                points: ["Set up real-time alerts for litigation filings and key procedural events involving competitors (e.g., M&A antitrust challenges, IP disputes).", "Automatically aggregate legal news impacting the company's core business sectors (e.g., FinTech, Pharma) for focused risk analysis."]
+                            },
+                            {
+                                heading: "Regulatory Compliance & Alerts",
+                                points: ["Filter global legislative and regulatory news to identify pending laws (e.g., AI governance, digital taxation) that require proactive policy updates.", "Deliver tailored digests and quick, essential summaries to Compliance, HR, and Executive teams."]
+                            },
+                            {
+                                heading: "Executive Briefing Automation",
+                                points: ["Generate weekly or monthly automated summary reports detailing the most significant legal and regulatory developments relevant to the executive leadership team.", "Customize the AI-generated news digest to focus on topics tied to corporate strategic objectives (e.g., M&A, international expansion, ESG enforcement).", "Provide historical data analysis to identify trends in regulatory scrutiny and litigation risk."]
+                            }
+                        ]
+                    },
                     moons: []
                 },
                 {
                     name: "Luminance", 
                     colorClass: "color-green", 
-                    sizeClass: "size-md", 
-                    // UPDATED LOGO URL
+                    sizeClass: "size-lg", 
                     logo: `<img src="https://logo.clearbit.com/www.luminance.com" onerror="this.src='https://placehold.co/100x100/059669/ffffff?text=L';" alt="Luminance Logo">`,
                     isImageLogo: true,
-                    usage: "Used for **M&A due diligence**, quickly reviewing large volumes of contracts to identify and classify key clauses (e.g., change of control, indemnity).",
+                    usage: "Used for **M&A due diligence**, quickly reviewing large volumes of contracts to identify and classify key clauses (e.g., change of control, indemnity). Click for the full **In-House When to Use Guide**.",
+                    capabilities: { CR: true },
+                    cheatSheet: {
+                        title: "Contract Due Diligence and Review Automation",
+                        sections: [
+                            {
+                                heading: "M&A Due Diligence",
+                                points: ["Rapidly identify critical non-standard risk clauses (e.g., unlimited liability, unusual indemnity periods, restrictive covenants) in thousands of target company contracts.", "Create standardized reports flagging all documents that deviate from the company’s risk tolerance policy, reducing manual review time by 50-80%."]
+                            },
+                            {
+                                heading: "Contract Classification & Indexing",
+                                points: ["Automatically structure the company's entire contract portfolio by document type, governing law, counterparty, and termination date for improved search and retention.", "Facilitate post-signature compliance by querying the entire database for specific clause distribution (e.g., all contracts lacking a specific data security rider)."]
+                            },
+                            {
+                                heading: "Post-Acquisition Integration",
+                                points: ["Use AI to compare the acquired company's contracts against the parent company's standard agreements, identifying discrepancies requiring harmonization or renegotiation.", "Instantly flag critical contracts tied to 'change of control' clauses that were triggered by the acquisition, prioritizing vendor or customer communication.", "Generate summary data on contract terms to expedite sales and procurement integration for the newly merged entity."]
+                            }
+                        ]
+                    },
                     moons: []
                 },
                 {
                     name: "Rovo", 
                     colorClass: "color-orange", 
-                    sizeClass: "size-md", 
-                    // ADDED LOGO URL
+                    sizeClass: "size-lg", 
                     logo: `<img src="https://logo.clearbit.com/www.atlassian.com" onerror="this.src='https://placehold.co/100x100/ea580c/ffffff?text=R';" alt="Rovo Logo">`,
                     isImageLogo: true,
-                    usage: "Used for **internal knowledge retrieval**, answering employee questions instantly by searching across internal documents (policies, playbooks, forms).",
+                    usage: "Used for **internal knowledge retrieval**, answering employee questions instantly by searching across internal documents (policies, playbooks, forms). Click for the full **In-House When to Use Guide**.",
+                    capabilities: { IK: true },
+                    cheatSheet: {
+                        title: "Internal Knowledge Management & AI Chatbot",
+                        sections: [
+                            {
+                                heading: "Employee Self-Service",
+                                points: ["Deploy a secure, internal-facing legal chatbot trained exclusively on approved corporate policies (e.g., expense policy, insider trading rules, data retention schedules).", "Provide instant, documented guidance to employees, significantly reducing direct legal team interaction for routine compliance questions."]
+                            },
+                            {
+                                heading: "Legal Playbook Search",
+                                points: ["Allow in-house counsel to ask complex, conversational queries (e.g., 'What are our indemnification limits for SaaS contracts in Germany?') and receive synthesized answers sourced directly from internal legal playbooks and archived legal opinions."]
+                            },
+                            {
+                                heading: "Policy Generation & Updates",
+                                points: ["Draft a first version of a new internal policy (e.g., social media usage, remote work guidelines) by synthesizing best practices from existing corporate handbooks and external legal data.", "Quickly compare draft policies against international regulatory checklists (e.g., data privacy standards) to ensure global compliance before final review.", "Automatically generate localized versions of global policies based on pre-vetted country-specific legal requirements."]
+                            }
+                        ]
+                    },
                     moons: []
                 },
                 {
                     name: "Gemini 2.5 Pro", 
                     colorClass: "color-rainbow", 
                     sizeClass: "size-lg", 
-                    // UPDATED LOGO URL
                     logo: `<img src="https://logo.clearbit.com/agentspace.google.com" onerror="this.src='https://placehold.co/100x100/9400d3/ffffff?text=G2.5';" alt="Gemini 2.5 Pro Logo">`,
                     isImageLogo: true,
-                    usage: "The **advanced generative AI platform** powering custom workflows and complex reasoning across legal data sets, including complex contract drafting and risk scoring.",
+                    usage: "The **advanced generative AI platform** powering custom workflows and complex reasoning across legal data sets, including complex contract drafting and risk scoring. Click for the full **In-House When to Use Guide**.",
+                    capabilities: { LR: true, CR: true, IK: true, CD: true }, // Core platform capabilities
+                    cheatSheet: {
+                        title: "Advanced Generative AI Platform",
+                        sections: [
+                            {
+                                heading: "Complex Contract Drafting & Analysis",
+                                points: ["Utilize custom models to draft bespoke, multi-jurisdictional agreements (e.g., complex licensing, joint venture terms) based on internal best practices.", "Use the platform's reasoning capabilities to reconcile conflicting clauses across a suite of related documents, ensuring contractual consistency."]
+                            },
+                            {
+                                heading: "Risk Scoring & Compliance Automation",
+                                points: ["Build automated workflows to analyze vendor contracts against internal security and compliance standards (e.g., GDPR, CCPA).", "Generate a single 'Risk Score' and a summary of necessary revisions before final legal review and approval."]
+                            },
+                            {
+                                heading: "Cross-Platform Integration & Orchestration",
+                                points: ["Serve as the central intelligence layer that integrates outputs from other tools (e.g., analyzing M&A risk identified by Luminance, then drafting necessary remediation agreements).", "Create and automate 'Legal Flows' that trigger compliance checks when specific corporate events occur (e.g., new vendor added to procurement system).", "Rapidly prototype bespoke AI applications tailored to niche, high-value legal processes not covered by off-the-shelf software."]
+                            }
+                        ]
+                    },
                     moons: [
-                        { name: "Gemini Gems", colorClass: "color-blue", sizeClass: "size-sm", logo: "GG", usage: "A specialized, secure version for **highly sensitive tasks** requiring maximum data isolation, such as privileged communication review." },
-                        { name: "NotebookLM", colorClass: "color-yellow", sizeClass: "size-sm", logo: "NLM", usage: "Used for **deep document analysis** and synthesis, creating detailed reports and executive summaries from diverse sources (e.g., litigation transcripts, regulatory filings)." }
-                    ]
+                        { 
+                            name: "Gemini Gems", 
+                            colorClass: "color-blue", 
+                            sizeClass: "size-sm", 
+                            // Using the shared logo content
+                            logo: sharedGeminiMoonLogo,
+                            isImageLogo: true, 
+                            usage: "A specialized, secure version for **highly sensitive tasks** requiring maximum data isolation, such as privileged communication review. Click for the full **In-House When to Use Guide**.",
+                            capabilities: { SD: true }, // Secure Data capability
+                            cheatSheet: {
+                                title: "Secure Data Isolation & Privileged Review",
+                                sections: [
+                                    {
+                                        heading: "Secure Environment for Sensitive Data",
+                                        points: ["Use the isolated instance for highly confidential legal tasks, such as internal investigations, whistle-blower reports, or privileged communication review in litigation hold scenarios.", "Ensure that data processed here does not inform the training or context of general-purpose AI models."]
+                                    },
+                                    {
+                                        heading: "Auditing & Data Governance",
+                                        points: ["Maintain a forensic-ready audit trail detailing who used the model, the input provided, and the output generated during sensitive review periods.", "Fulfill strict e-discovery and data governance requirements for all privileged and sensitive legal work product."]
+                                    },
+                                    {
+                                        heading: "Internal Compliance Investigations",
+                                        points: ["Securely analyze employee communications (e.g., Slack, email data) during internal HR or compliance investigations to identify patterns of potential misconduct or policy violation.", "Use advanced prompt engineering to search for explicit language that could indicate fraud, collusion, or harassment without exposing the data to external LLM training pools.", "Generate fully redacted and summarized reports for the board or external auditors while retaining the original data in the secured environment."]
+                                    }
+                                ]
+                            }
+                        },
+                        { 
+                            name: "NotebookLM", 
+                            colorClass: "color-yellow", 
+                            sizeClass: "size-sm", 
+                            // Using the shared logo content (Same as Gemini Gems)
+                            logo: sharedGeminiMoonLogo, 
+                            isImageLogo: true,
+                            usage: "Used for **deep document analysis** and synthesis, creating detailed reports and executive summaries from diverse sources (e.g., litigation transcripts, regulatory filings). Click for the full **In-House When to Use Guide**.",
+                            capabilities: { LR: true, CR: true, IK: true }, // Analysis/Synthesis applies to these domains
+                            cheatSheet: {
+                                title: "Deep Document Analysis & Synthesis",
+                                sections: [
+                                    {
+                                        heading: "Case File Synthesis",
+                                        points: ["In large-scale litigation, load all discovery documents, transcripts, and exhibits to generate unified witness summaries, cross-document timelines, and thematic relationship maps.", "This tool replaces weeks of manual synthesis work, offering rapid insight into complex factual patterns."]
+                                    },
+                                    {
+                                        heading: "Executive Summaries & Risk Briefings",
+                                        points: ["Generate objective executive briefing documents that distill the legal implications of new M&A targets or critical regulatory changes for non-legal leadership.", "Use the tool to 'cross-examine' a document set, testing assumptions and identifying internal inconsistencies before they become external vulnerabilities."]
+                                    },
+                                    {
+                                        heading: "Training & Onboarding",
+                                        points: ["Create customized 'Source Notes' for junior counsel or new hires by loading key regulatory guides and internal memoranda, allowing them to ask natural language questions about the documents.", "Develop interactive study guides from complex legal texts (e.g., HIPAA, Sarbanes-Oxley) to test and train the legal and compliance teams.", "Rapidly summarize all historical legal advice provided on a specific topic (e.g., data residency) to onboard an attorney quickly on a legacy matter."]
+                            }
+                        ]
+                    } 
+                }
+            ]
                 }
             ];
 
@@ -321,7 +554,12 @@
             const sun = document.querySelector('.sun');
             const tooltip = document.getElementById('tooltip');
             
-            // Function to find data by name, including the core
+            // FIX: Declared cheat sheet variables using 'let' so they can be assigned later
+            let cheatSheetPanel, sheetTitle, sheetContent, closeSheetBtn;
+
+            /**
+             * Function to find data by name, including the core.
+             */
             function findSystemData(name) {
                 if (name === coreUsage.name) return coreUsage;
                 
@@ -336,12 +574,67 @@
                 }
                 return { name: name, usage: 'Usage details are currently unavailable for this system.' };
             }
+
+            /**
+             * Shows the detailed cheat sheet side panel.
+             * @param {Object} data The structured data for the planet/moon.
+             */
+            function showCheatSheet(data) {
+                if (!data.cheatSheet) return; // Only show if cheat sheet data exists
+
+                // Close the hover tooltip immediately
+                hideTooltip();
+
+                // UPDATED: Changed "Cheat Sheet" to "When to Use"
+                sheetTitle.textContent = `${data.name}: When to Use`;
+                
+                let contentHtml = `<h3 class="text-xl font-bold text-yellow-400 mb-4">${data.cheatSheet.title}</h3>`;
+                
+                data.cheatSheet.sections.forEach(section => {
+                    contentHtml += `<h4 class="text-lg font-semibold mt-6 mb-2 text-orange-400">${section.heading}</h4>`;
+                    contentHtml += `<ul class="list-disc list-inside space-y-2 ml-4 text-gray-300">`;
+                    section.points.forEach(point => {
+                        contentHtml += `<li>${point}</li>`;
+                    });
+                    contentHtml += `</ul>`;
+                });
+                
+                sheetContent.innerHTML = contentHtml;
+                cheatSheetPanel.classList.add('open');
+            }
             
+            /**
+             * Hides the cheat sheet side panel.
+             */
+            function hideCheatSheet() {
+                cheatSheetPanel.classList.remove('open');
+            }
+            
+            /**
+             * Initializes static DOM elements and attaches required listeners.
+             * This must run after the DOM is fully loaded.
+             */
+            function initStaticElements() {
+                // Assign elements now that the DOM is loaded
+                cheatSheetPanel = document.getElementById('cheat-sheet-panel');
+                sheetTitle = document.getElementById('sheet-title');
+                sheetContent = document.getElementById('sheet-content');
+                closeSheetBtn = document.getElementById('close-sheet-btn');
+
+                // Listener for closing the panel - now safe to attach
+                if (closeSheetBtn) {
+                    closeSheetBtn.addEventListener('click', hideCheatSheet);
+                }
+            }
+
             /**
              * Shows the tooltip next to the hovered element.
              * @param {HTMLElement} element The planet, moon, or sun element being hovered.
              */
             function showTooltip(element) {
+                // If the cheat sheet is open, don't show tooltips
+                if (cheatSheetPanel && cheatSheetPanel.classList.contains('open')) return;
+
                 const name = element.getAttribute('data-system-name');
                 const data = findSystemData(name);
                 
@@ -349,7 +642,10 @@
 
                 const rect = element.getBoundingClientRect();
                 
-                tooltip.innerHTML = `<h4>${data.name}</h4><p>${data.usage}</p>`;
+                // Content with strong tags from the usage string
+                const usageHtml = element.getAttribute('data-usage');
+
+                tooltip.innerHTML = `<h4>${data.name}</h4><p>${usageHtml}</p>`;
 
                 // Determine position: Place to the right if possible, otherwise to the left.
                 let x = rect.right + 10;
@@ -397,12 +693,112 @@
                 const planets = galaxySystem.querySelectorAll('.planet');
                 planets.forEach(p => p.remove());
             }
+            
+            /**
+             * Renders the capability matrix below the galaxy.
+             */
+            function renderUsageMatrix() {
+                const matrixContainer = document.getElementById('usage-matrix');
+                if (!matrixContainer) return;
+                matrixContainer.innerHTML = ''; // Clear previous content
+
+                // Collect all tools (planets and moons) into a flat array
+                const allTools = galaxyData.flatMap(p => [p, ...(p.moons || [])]);
+
+                // Total columns: 1 (Use Case) + 7 (Tools) = 8
+                const totalColumns = allTools.length + 1;
+
+                // 1. Create the header row (Tool Names and LOGOS)
+                let toolsHeader = allTools.map(tool => {
+                    let rawLogoContent;
+                    let logoClasses = tool.colorClass; 
+                    
+                    // Determine content for the logo circle
+                    if (tool.isImageLogo) {
+                        // For image logos, use the HTML content from the logo property
+                        rawLogoContent = tool.logo;
+                        logoClasses += ' bg-white'; // Set background to white for clear logo contrast
+                    } else {
+                        // For placeholder text logos (like GG for Gems), use the text and white background
+                        rawLogoContent = `<span class="text-sm font-bold text-gray-800">${tool.logo}</span>`;
+                        logoClasses = ' bg-white';
+                    }
+
+                    // Wrap the logo and name together
+                    return `
+                        <div class="p-3 font-semibold text-center truncate bg-gray-700 text-yellow-400 border border-gray-600 shadow-md rounded-t-lg flex flex-col items-center justify-center h-full">
+                            <!-- UPDATED SIZE: w-16 h-16 -->
+                            <div class="w-16 h-16 flex items-center justify-center mb-1 rounded-full overflow-hidden p-1 ${logoClasses}" style="min-width: 4rem;">
+                                ${rawLogoContent}
+                            </div>
+                            <span class="text-sm">${tool.name}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                let headerRow = `
+                    <div class="grid grid-cols-2 md:grid-cols-7 lg:grid-cols-${totalColumns} gap-0 border-b-2 border-orange-600 bg-gray-800 rounded-t-lg">
+                        <div class="p-3 font-bold text-lg border-r-2 border-orange-600 text-left text-orange-400 col-span-2 md:col-span-1 flex items-center">Core Use Cases</div>
+                        ${toolsHeader}
+                    </div>
+                `;
+
+                // 2. Create the data rows
+                let matrixBody = '';
+                const useCaseKeys = Object.keys(masterUseCases);
+
+                useCaseKeys.forEach(key => {
+                    const useCaseName = masterUseCases[key];
+                    
+                    // Start the row (Use Case Name column)
+                    let rowHtml = `
+                        <div class="p-3 font-medium border-b border-gray-700 text-left text-gray-300 col-span-2 md:col-span-1 flex items-center bg-gray-800">
+                            ${useCaseName}
+                        </div>
+                    `;
+
+                    // Add cells for each tool
+                    allTools.forEach(tool => {
+                        // Check if the tool has the specific capability
+                        const hasCapability = tool.capabilities && tool.capabilities[key];
+                        
+                        // Use a checkmark for presence, a dash for absence
+                        const checkMark = hasCapability 
+                            ? `<span class="text-xl text-green-500 font-bold">✓</span>` 
+                            : `<span class="text-xl text-gray-600 font-medium">—</span>`;
+                        
+                        rowHtml += `
+                            <div class="p-3 border-b border-gray-700 text-center flex justify-center items-center bg-gray-900 hover:bg-gray-800 transition duration-150">
+                                ${checkMark}
+                            </div>
+                        `;
+                    });
+                    
+                    // Close the row
+                    matrixBody += `<div class="grid grid-cols-2 md:grid-cols-7 lg:grid-cols-${totalColumns} gap-0">${rowHtml}</div>`;
+                });
+
+                // 3. Assemble and inject
+                matrixContainer.innerHTML = `
+                    <h2 class="text-3xl font-extrabold text-white text-center mb-6 pt-10 border-t border-gray-700">Usage Matrix: Tool Capabilities</h2>
+                    <div class="matrix-table min-w-full overflow-x-auto">
+                        <div class="min-w-[1200px] lg:min-w-full"> <!-- Ensure scrolling on small screens -->
+                            ${headerRow}
+                            ${matrixBody}
+                        </div>
+                    </div>
+                `;
+            }
+
 
             /**
              * Calculates dimensions and redraws the entire galaxy system.
              */
             function recalculateGalaxy() {
                 clearGalaxy(); // Clear old elements before redrawing
+                
+                // Ensure the sun's name is updated in the DOM
+                sun.setAttribute('data-system-name', coreUsage.name); 
 
                 // Get the actual runtime size of the container (in pixels)
                 const size = galaxySystem.offsetWidth;
@@ -530,8 +926,15 @@
                             const moonLogo = document.createElement('div');
                             moonLogo.style.width = '95%';
                             moonLogo.style.height = '95%';
+                            // The moon-logo class now ensures circular shape
                             moonLogo.className = 'rounded-full flex justify-center items-center bg-gray-100 moon-logo';
-                            moonLogo.innerHTML = `<span class="text-xs font-bold text-gray-800">${moonData.logo}</span>`;
+                            
+                            // Check if it's an image logo or just text for the moon
+                            if (moonData.isImageLogo) {
+                                moonLogo.innerHTML = moonData.logo;
+                            } else {
+                                moonLogo.innerHTML = `<span class="text-xs font-bold text-gray-800">${moonData.logo}</span>`;
+                            }
                             
                             const moonName = document.createElement('span');
                             moonName.className = 'moon-name';
@@ -546,7 +949,7 @@
                     galaxySystem.appendChild(planet);
                 });
                 
-                // --- HOVER INTERACTION LOGIC ---
+                // --- INTERACTION LOGIC ---
                 // Re-attach listeners to the newly created elements
                 const sunElement = document.querySelector('.sun');
                 const interactiveElements = [sunElement, ...document.querySelectorAll('.planet'), ...document.querySelectorAll('.moon')];
@@ -554,24 +957,59 @@
                 interactiveElements.forEach(item => {
                     const name = item.getAttribute('data-system-name');
                     const data = findSystemData(name);
-                    if (data && data.usage) {
+
+                    // 1. Tooltip (on hover) logic
+                    // EXCLUDE: Do not apply hover listener or data-usage to the core element (id="sun-core")
+                    if (data && data.usage && item.id !== 'sun-core') {
+                        // Replace markdown bolding for display in the tooltip
                         const usageHtml = data.usage.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                         item.setAttribute('data-usage', usageHtml);
+                        
+                        item.addEventListener('mouseover', function() {
+                            const usageHtml = this.getAttribute('data-usage');
+                            if (usageHtml) {
+                                showTooltip(this);
+                            }
+                        });
+                        item.addEventListener('mouseout', hideTooltip);
                     }
                     
-                    item.addEventListener('mouseover', function() {
-                        const usageHtml = this.getAttribute('data-usage');
-                        if (usageHtml) {
-                            showTooltip(this);
-                        }
-                    });
-                    item.addEventListener('mouseout', hideTooltip);
+                    // 2. Cheat Sheet (on click) logic - ONLY for planets and moons, not the core
+                    if (data.cheatSheet) {
+                        item.addEventListener('click', function() {
+                            showCheatSheet(data);
+                        });
+                    }
                 });
-                // --- END HOVER INTERACTION LOGIC ---
+                // --- END INTERACTION LOGIC ---
+                
+                // RENDER THE MATRIX
+                renderUsageMatrix();
+
             } // End recalculateGalaxy function
 
+            /**
+             * Initializes static DOM elements and attaches required listeners.
+             * This must run after the DOM is fully loaded.
+             */
+            function initStaticElements() {
+                // Assign elements now that the DOM is loaded
+                cheatSheetPanel = document.getElementById('cheat-sheet-panel');
+                sheetTitle = document.getElementById('sheet-title');
+                sheetContent = document.getElementById('sheet-content');
+                closeSheetBtn = document.getElementById('close-sheet-btn');
+
+                // Listener for closing the panel - now safe to attach
+                if (closeSheetBtn) {
+                    closeSheetBtn.addEventListener('click', hideCheatSheet);
+                }
+            }
+
             // Initial Draw
-            document.addEventListener('DOMContentLoaded', recalculateGalaxy);
+            document.addEventListener('DOMContentLoaded', function() {
+                initStaticElements(); // Call the initialization function after DOM is loaded
+                recalculateGalaxy();
+            });
             // Redraw on Resize
             window.addEventListener('resize', recalculateGalaxy);
 
@@ -579,10 +1017,23 @@
     </script>
 </div>
 
-<!-- Simple footer note to explain the visualization -->
-<div class="fixed bottom-0 left-0 right-0 text-center p-4 bg-gray-900 bg-opacity-80 text-gray-400 footer-note">
-    <p>This AI Galaxy visualization maps the Legal Tech Ecosystem around the LRC Core. Hover to see names and click to explore a tool!</p>
-    <p class="mt-1">Platforms with components (moons) indicate native AI applications.</p>
+<!-- NEW USAGE MATRIX SECTION -->
+<section id="usage-matrix" class="w-full max-w-7xl mx-auto px-4"></section>
+
+</div> <!-- End main-container -->
+
+<!-- Cheat Sheet Side Panel (The Modal/Sidebar) -->
+<div id="cheat-sheet-panel" class="fixed top-0 right-0 h-full w-full md:w-1/3 bg-gray-900 border-l border-orange-600 shadow-2xl p-6 overflow-y-auto z-50">
+    <div class="flex justify-between items-start mb-6 border-b border-gray-700 pb-4">
+        <!-- UPDATED: Title now reflects "When to Use" -->
+        <h2 id="sheet-title" class="text-2xl font-bold text-yellow-400 pr-4"></h2>
+        <button id="close-sheet-btn" class="text-gray-400 hover:text-white text-4xl leading-none">
+            &times; <!-- Close symbol -->
+        </button>
+    </div>
+    <div id="sheet-content">
+        <!-- Content injected here -->
+    </div>
 </div>
 
 </body>
