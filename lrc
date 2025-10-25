@@ -317,8 +317,8 @@
 
 <nav id="tab-nav" class="flex flex-wrap gap-2 mb-8 p-1 bg-white rounded-xl shadow-inner">
             
-<button id="btn-adventure-1" onclick="switchTab('adventure-1')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-black bg-[#ff5200] shadow-md">1. Prompt Enhancements</button>
-            <button id="btn-adventure-2" onclick="switchTab('adventure-2')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">2. AI Legal Tech Galaxy</button>
+<button id="btn-adventure-1" onclick="switchTab('adventure-1')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-black bg-[#ff5200] shadow-md">1. AI Legal Tech Galaxy</button>
+            <button id="btn-adventure-2" onclick="switchTab('adventure-2')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">2. Prompt Enhancements</button>
             <button id="btn-adventure-3" onclick="switchTab('adventure-3')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">3. Deep Sea Dive</button>
             <button id="btn-adventure-4" onclick="switchTab('adventure-4')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">4. Desert Crossing</button>
             <button id="btn-adventure-5" onclick="switchTab('adventure-5')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">5. Jungle Trek</button>
@@ -332,50 +332,8 @@
 <div id="tab-content" class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-200">
             
             
-
+<!-- NEW ADVENTURE 1: GALAXY (Content from old adventure-2) -->
 <div id="adventure-1" class="tab-pane">
-                
-<h2 class="text-2xl font-bold text-gray-800 mb-2">Prompt Enhancements</h2>
-                <p class="text-gray-600 mb-6">Follow the path through the city to all four destinations. Click "Next Stop" to advance the route.</p>
-
-                
-<div id="statusCard" class="bg-gray-50 p-4 rounded-xl shadow-md mb-6 border-l-4 border-[#ff5200]">
-                    <p class="font-semibold text-gray-700">Current Status:</p>
-                    <p id="currentStatusText" class="text-lg text-blue-700"></p>
-                </div>
-
-                
-<div class="flex flex-col lg:flex-row gap-6">
-                    
-<div class="flex-grow">
-                        <canvas id="mapCanvas" width="800" height="500" class="w-full h-auto"></canvas>
-                    </div>
-
-                    
-<div class="lg:w-64 flex flex-col space-y-4">
-                        
-<button id="nextStopBtn" onclick="nextStop()"
-                                    class="btn-primary bg-[#ff5200] text-black font-semibold py-3 px-6 rounded-lg shadow-lg hover:opacity-90 disabled:bg-gray-400">
-                                Next Stop
-                            </button>
-                            <button id="resetBtn" onclick="resetMap()"
-                                    class="btn-primary bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-gray-600">
-                                Reset Route
-                            </button>
-                            
-<div class="bg-gray-50 p-4 rounded-xl shadow-inner border border-gray-200">
-                                <h3 class="font-bold text-gray-800 mb-2">Stops</h3>
-                                <ul id="stopList" class="space-y-2 text-sm text-gray-600">
-                                    
-
-</ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            
-<div id="adventure-2" class="tab-pane hidden">
     <h2 class="text-2xl font-bold text-gray-800 mb-4">AI Legal Tech Galaxy</h2>
     <div class="main-container-galaxy bg-[#0d1117] min-h-screen p-4 sm:p-8">
         <!-- Tooltip element added for hover text -->
@@ -425,6 +383,47 @@
         </div>
     </div>
 </div>
+
+<!-- NEW ADVENTURE 2: MAP (Content from old adventure-1) -->
+<div id="adventure-2" class="tab-pane hidden">
+    <h2 class="text-2xl font-bold text-gray-800 mb-2">Prompt Enhancements</h2>
+    <p class="text-gray-600 mb-6">Follow the path through the city to all four destinations. Click "Next Stop" to advance the route.</p>
+
+    
+<div id="statusCard" class="bg-gray-50 p-4 rounded-xl shadow-md mb-6 border-l-4 border-[#ff5200]">
+        <p class="font-semibold text-gray-700">Current Status:</p>
+        <p id="currentStatusText" class="text-lg text-blue-700"></p>
+    </div>
+
+    
+<div class="flex flex-col lg:flex-row gap-6">
+        
+<div class="flex-grow">
+            <canvas id="mapCanvas" width="800" height="500" class="w-full h-auto"></canvas>
+        </div>
+
+        
+<div class="lg:w-64 flex flex-col space-y-4">
+            
+<button id="nextStopBtn" onclick="nextStop()"
+                        class="btn-primary bg-[#ff5200] text-black font-semibold py-3 px-6 rounded-lg shadow-lg hover:opacity-90 disabled:bg-gray-400">
+                    Next Stop
+                </button>
+                <button id="resetBtn" onclick="resetMap()"
+                        class="btn-primary bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-gray-600">
+                    Reset Route
+                </button>
+                
+<div class="bg-gray-50 p-4 rounded-xl shadow-inner border border-gray-200">
+                    <h3 class="font-bold text-gray-800 mb-2">Stops</h3>
+                    <ul id="stopList" class="space-y-2 text-sm text-gray-600">
+                        
+
+</ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
             <div id="adventure-3" class="tab-pane hidden">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Deep Sea Dive</h2>
@@ -513,20 +512,20 @@
                 }
             });
 
-            // 4. Special calls for canvas redrawing on tab switch
-            if (tabId === 'adventure-1') {
-                // Delay draw to ensure the canvas element has rendered in the DOM
-                setTimeout(drawMap, 50);
-            } else if (tabId === 'adventure-2') {
+            // 4. Special calls for canvas redrawing on tab switch (SWAPPED LOGIC)
+            if (tabId === 'adventure-1') { // NOW GALAXY
                 // Call the galaxy's initialization logic when this tab opens
                 setTimeout(() => {
                     galaxyInitStaticElements(); // Initialize DOM elements for galaxy
                     recalculateGalaxy();        // Draw the visualization
                 }, 50);
+            } else if (tabId === 'adventure-2') { // NOW MAP
+                // Delay draw to ensure the canvas element has rendered in the DOM
+                setTimeout(drawMap, 50);
             }
         }
         
-        // --- Map Simulation Logic (Adventure 1: Prompt Enhancements) ---
+        // --- Map Simulation Logic (Adventure 2: Prompt Enhancements) ---
 
         // Global variables for the Map
         const canvas = document.getElementById('mapCanvas');
@@ -1217,7 +1216,7 @@
             const sunElement = document.getElementById('sun-core');
 
             // Crucial check: only run if the elements exist (i.e., we are on the correct tab)
-            if (!galaxySystem || !sunElement || activeTab !== 'adventure-2') {
+            if (!galaxySystem || !sunElement || activeTab !== 'adventure-1') { // Changed to 'adventure-1'
                  clearGalaxy(); // Clean up if running unexpectedly
                  return;
             }
