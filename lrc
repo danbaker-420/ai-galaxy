@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Adventure Hub</title>
+    <title>LRC Interactive AI Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
@@ -25,13 +25,13 @@
             /* Updated shadow color */
             box-shadow: 0 4px 6px -1px rgba(255, 82, 0, 0.5), 0 2px 4px -2px rgba(255, 82, 0, 0.5);
         }
-        .tab-button {
+        .tab-button, .sub-tab-button {
             transition: background-color 0.2s, color 0.2s;
             /* Allow text wrapping */
             white-space: normal;
             height: auto; /* Allow height to adjust */
         }
-        .tab-pane {
+        .tab-pane, .sub-adventure-pane {
             animation: fadeIn 0.3s ease-in-out;
         }
         @keyframes fadeIn {
@@ -311,28 +311,35 @@
     <div class="max-w-6xl w-full">
         
 
-<h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b-4 border-[#ff5200] pb-2">Adventure Hub (8 Worlds)</h1>
+<!-- UPDATED SITE TITLE -->
+<h1 class="text-4xl font-extrabold text-gray-900 mb-6 border-b-4 border-[#ff5200] pb-2">LRC Interactive AI Hub</h1>
         
         
 
-<nav id="tab-nav" class="flex flex-wrap gap-2 mb-8 p-1 bg-white rounded-xl shadow-inner">
+<!-- NEW MAIN NAVIGATION -->
+<nav id="main-tab-nav" class="flex flex-wrap gap-2 mb-8 p-1 bg-white rounded-xl shadow-inner">
             
-<button id="btn-adventure-1" onclick="switchTab('adventure-1')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-black bg-[#ff5200] shadow-md">1. AI Legal Tech Galaxy</button>
-            <button id="btn-adventure-2" onclick="switchTab('adventure-2')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">2. Prompt Enhancements</button>
-            <button id="btn-adventure-3" onclick="switchTab('adventure-3')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">3. Deep Sea Dive</button>
-            <button id="btn-adventure-4" onclick="switchTab('adventure-4')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">4. Desert Crossing</button>
-            <button id="btn-adventure-5" onclick="switchTab('adventure-5')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">5. Jungle Trek</button>
-            <button id="btn-adventure-6" onclick="switchTab('adventure-6')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">6. Space Odyssey</button>
-            <button id="btn-adventure-7" onclick="switchTab('adventure-7')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">7. Arctic Discovery</button>
-            <button id="btn-adventure-8" onclick="switchTab('adventure-8')" class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">8. Volcano Summit</button>
-        </nav>
+    <button id="btn-main-adventure1" onclick="switchMainTab('adventure-1')" 
+            class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-black bg-[#ff5200] shadow-md">
+        Legal Tech AI Galaxy
+    </button>
+    <button id="btn-main-adventuresparent" onclick="switchMainTab('adventures-parent')" 
+            class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">
+        AI Adventures
+    </button>
+    <!-- NEW BUTTON FOR USAGE MATRIX -->
+    <button id="btn-main-adventurematrix" onclick="switchMainTab('adventure-matrix')" 
+            class="tab-button flex-1 min-w-[120px] py-2 px-3 text-sm font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">
+        Usage Matrix: Tool Capabilities
+    </button>
+</nav>
 
         
 
 <div id="tab-content" class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-200">
             
             
-<!-- NEW ADVENTURE 1: GALAXY (Content from old adventure-2) -->
+<!-- ADVENTURE 1: GALAXY (Main Tab Content) -->
 <div id="adventure-1" class="tab-pane">
     <h2 class="text-2xl font-bold text-gray-800 mb-4">AI Legal Tech Galaxy</h2>
     <div class="main-container-galaxy bg-[#0d1117] min-h-screen p-4 sm:p-8">
@@ -366,8 +373,7 @@
             <!-- Planets and Moons are drawn dynamically by JS -->
         </div>
 
-        <!-- NEW USAGE MATRIX SECTION -->
-        <section id="usage-matrix" class="w-full max-w-7xl mx-auto px-4"></section>
+        <!-- NEW USAGE MATRIX SECTION - REMOVED from here -->
 
         <!-- Cheat Sheet Side Panel (The Modal/Sidebar) -->
         <div id="cheat-sheet-panel" class="fixed top-0 right-0 h-full w-full md:w-1/3 bg-gray-900 border-l border-orange-600 shadow-2xl p-6 overflow-y-auto z-50">
@@ -384,48 +390,75 @@
     </div>
 </div>
 
-<!-- NEW ADVENTURE 2: MAP (Content from old adventure-1) -->
-<div id="adventure-2" class="tab-pane hidden">
-    <h2 class="text-2xl font-bold text-gray-800 mb-2">Prompt Enhancements</h2>
-    <p class="text-gray-600 mb-6">Follow the path through the city to all four destinations. Click "Next Stop" to advance the route.</p>
-
-    
-<div id="statusCard" class="bg-gray-50 p-4 rounded-xl shadow-md mb-6 border-l-4 border-[#ff5200]">
-        <p class="font-semibold text-gray-700">Current Status:</p>
-        <p id="currentStatusText" class="text-lg text-blue-700"></p>
+<!-- NEW ADVENTURE MATRIX TAB -->
+<div id="adventure-matrix" class="tab-pane hidden">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Usage Matrix: Tool Capabilities</h2>
+    <!-- Matrix will be rendered here by JS -->
+    <div id="matrix-content-target" class="w-full max-w-full mx-auto px-4">
+        <!-- Content injected by renderUsageMatrix() -->
     </div>
+</div>
 
-    
-<div class="flex flex-col lg:flex-row gap-6">
-        
-<div class="flex-grow">
-            <canvas id="mapCanvas" width="800" height="500" class="w-full h-auto"></canvas>
-        </div>
+<!-- NEW PARENT TAB FOR ALL ADVENTURES (Tab 2-8) -->
+<div id="adventures-parent" class="tab-pane hidden">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">AI Adventures</h2>
 
-        
-<div class="lg:w-64 flex flex-col space-y-4">
+    <!-- Sub-Navigation for Adventures -->
+    <nav id="sub-tab-nav" class="flex flex-wrap gap-2 mb-6 p-1 bg-gray-100 rounded-lg shadow-inner">
+        <button id="btn-adventure-2" onclick="switchAdventureTab('adventure-2')" class="sub-tab-button flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold rounded-lg text-black bg-[#ff5200] shadow-md">Prompt Enhancements</button>
+        <button id="btn-adventure-3" onclick="switchAdventureTab('adventure-3')" class="sub-tab-button flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">Deep Sea Dive</button>
+        <button id="btn-adventure-4" onclick="switchAdventureTab('adventure-4')" class="sub-tab-button flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">Desert Crossing</button>
+        <button id="btn-adventure-5" onclick="switchAdventureTab('adventure-5')" class="sub-tab-button flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">Jungle Trek</button>
+        <button id="btn-adventure-6" onclick="switchAdventureTab('adventure-6')" class="sub-tab-button flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">Space Odyssey</button>
+        <button id="btn-adventure-7" onclick="switchAdventureTab('adventure-7')" class="sub-tab-button flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">Arctic Discovery</button>
+        <button id="btn-adventure-8" onclick="switchAdventureTab('adventure-8')" class="sub-tab-button flex-1 min-w-[120px] py-2 px-3 text-xs font-semibold rounded-lg text-gray-600 bg-gray-200 hover:bg-[#ff5200] hover:text-black">Volcano Summit</button>
+    </nav>
+
+    <!-- Sub Content Container -->
+    <div id="sub-content-container">
             
-<button id="nextStopBtn" onclick="nextStop()"
-                        class="btn-primary bg-[#ff5200] text-black font-semibold py-3 px-6 rounded-lg shadow-lg hover:opacity-90 disabled:bg-gray-400">
-                    Next Stop
-                </button>
-                <button id="resetBtn" onclick="resetMap()"
-                        class="btn-primary bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-gray-600">
-                    Reset Route
-                </button>
-                
-<div class="bg-gray-50 p-4 rounded-xl shadow-inner border border-gray-200">
-                    <h3 class="font-bold text-gray-800 mb-2">Stops</h3>
-                    <ul id="stopList" class="space-y-2 text-sm text-gray-600">
-                        
+        <!-- ADVENTURE 2: MAP (Prompt Enhancements) -->
+        <div id="adventure-2" class="sub-adventure-pane">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Prompt Enhancements</h2>
+            <p class="text-gray-600 mb-6">Follow the path through the city to all four destinations. Click "Next Stop" to advance the route.</p>
 
-</ul>
+            
+        <div id="statusCard" class="bg-gray-50 p-4 rounded-xl shadow-md mb-6 border-l-4 border-[#ff5200]">
+                <p class="font-semibold text-gray-700">Current Status:</p>
+                <p id="currentStatusText" class="text-lg text-blue-700"></p>
+            </div>
+
+            
+        <div class="flex flex-col lg:flex-row gap-6">
+                
+        <div class="flex-grow">
+                    <canvas id="mapCanvas" width="800" height="500" class="w-full h-auto"></canvas>
+                </div>
+
+                
+        <div class="lg:w-64 flex flex-col space-y-4">
+                    
+        <button id="nextStopBtn" onclick="nextStop()"
+                                class="btn-primary bg-[#ff5200] text-black font-semibold py-3 px-6 rounded-lg shadow-lg hover:opacity-90 disabled:bg-gray-400">
+                            Next Stop
+                        </button>
+                        <button id="resetBtn" onclick="resetMap()"
+                                class="btn-primary bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-gray-600">
+                            Reset Route
+                        </button>
+                        
+        <div class="bg-gray-50 p-4 rounded-xl shadow-inner border border-gray-200">
+                            <h3 class="font-bold text-gray-800 mb-2">Stops</h3>
+                            <ul id="stopList" class="space-y-2 text-sm text-gray-600">
+                                
+
+        </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-            <div id="adventure-3" class="tab-pane hidden">
+            <div id="adventure-3" class="sub-adventure-pane hidden">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Deep Sea Dive</h2>
                 <p class="text-lg text-gray-600">Dive into the Mariana Trench and explore bioluminescent creatures and ancient shipwrecks.</p>
                 <div class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200 text-blue-800">
@@ -433,7 +466,7 @@
                 </div>
             </div>
 
-            <div id="adventure-4" class="tab-pane hidden">
+            <div id="adventure-4" class="sub-adventure-pane hidden">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Desert Crossing</h2>
                 <p class="text-lg text-gray-600">Navigate the scorching sands of the Sahara, managing water and resources to reach the oasis.</p>
                 <div class="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200 text-amber-800">
@@ -441,7 +474,7 @@
                 </div>
             </div>
 
-            <div id="adventure-5" class="tab-pane hidden">
+            <div id="adventure-5" class="sub-adventure-pane hidden">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Jungle Trek</h2>
                 <p class="text-lg text-gray-600">An immersive journey through the Amazon rainforest, identifying flora and fauna.</p>
                 <div class="mt-4 p-4 bg-green-50 rounded-lg border border-green-200 text-green-800">
@@ -449,7 +482,7 @@
                 </div>
             </div>
 
-            <div id="adventure-6" class="tab-pane hidden">
+            <div id="adventure-6" class="sub-adventure-pane hidden">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Space Odyssey</h2>
                 <p class="text-lg text-gray-600">Launch into orbit! A simulation of piloting a starship to distant planets.</p>
                 <div class="mt-4 p-4 bg-indigo-50 rounded-lg border border-indigo-200 text-indigo-800">
@@ -457,7 +490,7 @@
                 </div>
             </div>
 
-            <div id="adventure-7" class="tab-pane hidden">
+            <div id="adventure-7" class="sub-adventure-pane hidden">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Arctic Discovery</h2>
                 <p class="text-lg text-gray-600">Establish a research station and track wildlife across the frozen polar tundra.</p>
                 <div class="mt-4 p-4 bg-sky-50 rounded-lg border border-sky-200 text-sky-800">
@@ -465,7 +498,7 @@
                 </div>
             </div>
 
-            <div id="adventure-8" class="tab-pane hidden">
+            <div id="adventure-8" class="sub-adventure-pane hidden">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Volcano Summit</h2>
                 <p class="text-lg text-gray-600">Ascend an active volcano, measuring seismic activity and dodging molten hazards.</p>
                 <div class="mt-4 p-4 bg-red-50 rounded-lg border border-red-200 text-red-800">
@@ -473,54 +506,104 @@
                 </div>
             </div>
 
+    </div>
+</div>
         </div>
     </div>
 
     <script>
         // --- Tab Management Logic ---
-        let activeTab = 'adventure-1';
+        
+        // Global states
+        let activeMainTab = 'adventure-1';
+        let activeSubTab = 'adventure-2'; // Default sub-adventure
 
         /**
-         * Switches the active adventure tab and updates styling.
-         * @param {string} tabId - The ID of the adventure tab to switch to (e.g., 'adventure-1').
+         * Handles the click on the main top navigation tabs.
+         * @param {string} tabId - 'adventure-1', 'adventures-parent', or 'adventure-matrix'.
          */
-        function switchTab(tabId) {
-            activeTab = tabId;
+        function switchMainTab(tabId) {
+            activeMainTab = tabId;
 
-            // 1. Hide all tab content panes
-            document.querySelectorAll('.tab-pane').forEach(pane => {
-                pane.classList.add('hidden');
-            });
+            // 1. Hide all top-level content panes
+            document.getElementById('adventure-1').classList.add('hidden');
+            document.getElementById('adventures-parent').classList.add('hidden');
+            document.getElementById('adventure-matrix').classList.add('hidden'); // NEW
 
-            // 2. Show the selected tab content
+            
+            // 2. Show the selected main content pane
             const targetPane = document.getElementById(tabId);
             if (targetPane) {
                 targetPane.classList.remove('hidden');
             }
 
-            // 3. Update active button styling
-            document.querySelectorAll('#tab-nav button').forEach(button => {
-                // Remove all color classes for a clean slate before applying new ones
-                button.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'text-black', 'bg-[#ff5200]', 'hover:bg-[#ff5200]', 'hover:text-black', 'bg-gray-200', 'text-gray-600', 'hover:bg-gray-300');
-
-                if (button.id === `btn-${tabId}`) {
-                    // ACTIVE STYLE (Custom Orange BG, Black Text)
+            // 3. Update main button styling
+            document.querySelectorAll('#main-tab-nav .tab-button').forEach(button => {
+                // Reset to inactive style
+                button.classList.remove('bg-[#ff5200]', 'text-black', 'shadow-md');
+                button.classList.add('bg-gray-200', 'text-gray-600', 'hover:bg-[#ff5200]', 'hover:text-black');
+                
+                // Apply active style
+                if (button.id === `btn-main-${tabId.replace('-', '')}`) {
+                    button.classList.remove('bg-gray-200', 'text-gray-600', 'hover:bg-[#ff5200]', 'hover:text-black');
                     button.classList.add('bg-[#ff5200]', 'text-black', 'shadow-md');
-                } else {
-                    // INACTIVE STYLE (Gray BG, Gray Text, Hover Custom Orange)
-                    button.classList.add('bg-gray-200', 'text-gray-600', 'hover:bg-[#ff5200]', 'hover:text-black');
                 }
             });
 
-            // 4. Special calls for canvas redrawing on tab switch (SWAPPED LOGIC)
-            if (tabId === 'adventure-1') { // NOW GALAXY
-                // Call the galaxy's initialization logic when this tab opens
+            // 4. Special calls/Initialization
+            if (tabId === 'adventures-parent') {
+                // If switching to the parent, ensure the last active sub-tab is shown
+                switchAdventureTab(activeSubTab);
+            } else if (tabId === 'adventure-1') { 
+                // Call the galaxy's initialization logic
                 setTimeout(() => {
-                    galaxyInitStaticElements(); // Initialize DOM elements for galaxy
-                    recalculateGalaxy();        // Draw the visualization
+                    galaxyInitStaticElements();
+                    recalculateGalaxy();
                 }, 50);
-            } else if (tabId === 'adventure-2') { // NOW MAP
-                // Delay draw to ensure the canvas element has rendered in the DOM
+            } else if (tabId === 'adventure-matrix') { 
+                // Render the matrix on demand for the new page
+                renderUsageMatrix(); 
+            }
+        }
+
+
+        /**
+         * Handles the click on the sub-navigation tabs (inside AI Adventures).
+         * This replaces the old switchTab logic.
+         * @param {string} tabId - The ID of the adventure tab to switch to (e.g., 'adventure-2').
+         */
+        function switchAdventureTab(tabId) {
+            activeSubTab = tabId;
+
+            // 1. Hide all sub-content panes (adventure-2 through adventure-8)
+            const subContentContainer = document.getElementById('sub-content-container');
+            if (subContentContainer) {
+                subContentContainer.querySelectorAll('.sub-adventure-pane').forEach(pane => {
+                    pane.classList.add('hidden');
+                });
+            }
+
+            // 2. Show the selected sub-tab content
+            const targetPane = document.getElementById(tabId);
+            if (targetPane) {
+                targetPane.classList.remove('hidden');
+            }
+
+            // 3. Update active sub-button styling
+            document.querySelectorAll('#sub-tab-nav .sub-tab-button').forEach(button => {
+                // Reset to inactive style
+                button.classList.remove('bg-[#ff5200]', 'text-black', 'shadow-md');
+                button.classList.add('bg-gray-200', 'text-gray-600', 'hover:bg-[#ff5200]', 'hover:text-black');
+                
+                // Apply active style
+                if (button.id === `btn-${tabId}`) {
+                    button.classList.remove('bg-gray-200', 'text-gray-600', 'hover:bg-[#ff5200]', 'hover:text-black');
+                    button.classList.add('bg-[#ff5200]', 'text-black', 'shadow-md');
+                }
+            });
+
+            // 4. Special calls for canvas redrawing on tab switch
+            if (tabId === 'adventure-2') { // Prompt Enhancements map
                 setTimeout(drawMap, 50);
             }
         }
@@ -531,10 +614,17 @@
         const canvas = document.getElementById('mapCanvas');
         const ctx = canvas.getContext('2d');
         const startIconUrl = "https://cdn-icons-png.flaticon.com/512/602/602232.png";
+        const harveyIconUrl = "https://logo.clearbit.com/www.harvey.ai"; 
+        const topRigthIconUrl = "https://cdn-icons-png.flaticon.com/512/2098/2098439.png"; // Building image URL
+        const geminiIconUrl = "https://logo.clearbit.com/agentspace.google.com"; // New: Gemini Logo URL
 
         let startIcon = new Image();
+        let harveyIcon = new Image(); 
+        let topRigthIcon = new Image(); 
+        let geminiIcon = new Image(); // New: Gemini Image object
+
         let imagesLoadedCount = 0;
-        const totalImagesToLoad = 1; // Only loading the start icon now.
+        const totalImagesToLoad = 4; // Updated from 3 to 4
 
         function imageLoaded() {
             imagesLoadedCount++;
@@ -546,19 +636,46 @@
         startIcon.onload = imageLoaded;
         startIcon.onerror = () => { console.error("Failed to load starting icon image. Using fallback circle."); imageLoaded(); };
         startIcon.src = startIconUrl;
+
+        harveyIcon.onload = imageLoaded;
+        harveyIcon.onerror = () => { console.error("Failed to load Harvey.ai icon image. Using fallback circle."); imageLoaded(); };
+        harveyIcon.src = harveyIconUrl; 
         
+        topRigthIcon.onload = imageLoaded;
+        topRigthIcon.onerror = () => { console.error("Failed to load top right icon image."); imageLoaded(); };
+        topRigthIcon.src = topRigthIconUrl;
+        
+        geminiIcon.onload = imageLoaded; // New: Load Gemini icon
+        geminiIcon.onerror = () => { console.error("Failed to load Gemini icon image. Using fallback circle."); imageLoaded(); };
+        geminiIcon.src = geminiIconUrl;
+
+
         let currentSegment = 0;
         const totalStops = 4;
 
-        // Define the 4 stops (original coordinates/names)
+        // UPDATED STOPS: Removed old numbering from names
         const stops = [
-            { x: 100, y: 400, name: "Stop 1: Initial Prompt", color: '#EF4444' },
-            { x: 450, y: 100, name: "Stop 2: Harvey.ai", color: '#F59E0B' }, // Now a simple circle marker
-            { x: 700, y: 250, name: "Stop 3: Gemini 2.5 Pro", color: '#10B981' },
-            { x: 300, y: 450, name: "Stop 4: Final Output", color: '#6366F1' }
+            { x: 100, y: 400, name: "Initial Prompt", color: '#EF4444' }, // Index 0 (Start)
+            { x: 450, y: 100, name: "Harvey.ai", color: '#F59E0B' }, // Index 1 (New Stop 1)
+            { x: 700, y: 250, name: "Gemini 2.5 Pro", color: '#10B981' }, // Index 2 (New Stop 2)
+            { x: 300, y: 450, name: "Final Output", color: '#6366F1' } // Index 3 (New Stop 3)
         ];
+        
+        // Utility function to draw a rounded rectangle (for the button effect)
+        function roundRect(ctx, x, y, w, h, r) {
+            if (w < 2 * r) r = w / 2;
+            if (h < 2 * r) r = h / 2;
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + w, y, x + w, y + h, r);
+            ctx.arcTo(x + w, y + h, x, y + h, r);
+            ctx.arcTo(x, y + h, x, y, r);
+            ctx.arcTo(x, y, x + w, y, r);
+            ctx.closePath();
+        }
 
-        // --- UPDATED CITY BACKGROUND LOGIC (New Custom Palette) ---
+
+        // --- UPDATED CITY BACKGROUND LOGIC ---
         function drawBackground() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#f9fafb'; // Light base
@@ -573,26 +690,43 @@
 
             // Draw "City Blocks" (Custom colors)
             // Bottom-Left (HEX#ece0d6)
+            const blX = 50, blY = 320, blW = 280, blH = 150;
             ctx.fillStyle = '#ece0d6';
-            ctx.fillRect(50, 320, 280, 150);
+            ctx.fillRect(blX, blY, blW, blH);
             
-            // Top-Left (HEX#cec4a1)
+            // Top-Left (HEX#cec4a1) - CLEANED UP
+            const tlX = 50, tlY = 30, tlW = 280, tlH = 150;
             ctx.fillStyle = '#cec4a1';
-            ctx.fillRect(50, 30, 280, 150);
+            ctx.fillRect(tlX, tlY, tlW, tlH);
 
-            // Top-Right (HEX#566578)
+            // Top-Right (HEX#566578) - TARGET FOR BUILDING ICON
+            const trX = 470, trY = 30, trW = 280, trH = 150;
             ctx.fillStyle = '#566578';
-            ctx.fillRect(470, 30, 280, 150);
+            ctx.fillRect(trX, trY, trW, trH);
             
             // Bottom-Right (HEX#8d6e5b)
+            const brX = 470, brY = 320, brW = 280, brH = 150;
             ctx.fillStyle = '#8d6e5b';
-            ctx.fillRect(470, 320, 280, 150);
+            ctx.fillRect(brX, brY, brW, brH);
 
 
             // Draw a simple border
             ctx.strokeStyle = '#9ca3af';
             ctx.lineWidth = 2;
             ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+            // --- Draw Top-Right Building Icon (Moved) ---
+            if (topRigthIcon.complete && topRigthIcon.src) {
+                const iconSize = 90; // Same size as start icon
+                
+                // Adjusted position: Close to top-right corner of the block (Moved 5px closer)
+                const padding = 5; 
+                const iconX = trX + trW - iconSize - padding; 
+                const iconY = trY + padding;
+                
+                // Draw the image
+                ctx.drawImage(topRigthIcon, iconX, iconY, iconSize, iconSize);
+            }
         }
         // --- END UPDATED CITY BACKGROUND LOGIC ---
 
@@ -604,15 +738,19 @@
             resetBtn.disabled = currentSegment === 0;
 
             if (currentSegment === 0) {
-                statusEl.textContent = "Ready to start the route to " + stops[1].name + ".";
+                // Ready to start to Stop 1
+                statusEl.textContent = "Ready to start the route to Stop 1: " + stops[1].name + ".";
                 nextStopBtn.textContent = "Next Stop";
                 nextStopBtn.disabled = false;
             } else if (currentSegment < totalStops - 1) {
-                statusEl.textContent = `En route to ${stops[currentSegment + 1].name} (${currentSegment} of 3 segments complete).`;
+                // currentSegment = 1 (to Stop 2) or 2 (to Stop 3)
+                const nextStopNumber = currentSegment + 1;
+                const nextStopName = stops[nextStopNumber].name;
+                statusEl.textContent = `En route to Stop ${nextStopNumber}: ${nextStopName} (${currentSegment} of 3 segments complete).`;
                 nextStopBtn.textContent = "Next Stop";
                 nextStopBtn.disabled = false;
             } else {
-                statusEl.textContent = `Route Complete! All 4 stops visited.`;
+                statusEl.textContent = `Route Complete! All 3 stops visited.`;
                 nextStopBtn.textContent = "Route Complete";
                 nextStopBtn.disabled = true;
             }
@@ -644,33 +782,130 @@
         }
 
         function drawMarkers() {
-            const markerSize = 90; // For the initial building icon
+            const markerSize = 90; // For the initial building icon (Stop 0)
+            const otherMarkerRadius = 15; // For generic circle markers (Stop 3 / Index 3)
+            
+            // Harvey/Gemini icon dimensions (Large image circle)
+            const iconCircleRadius = 50; 
+            const iconImageSize = iconCircleRadius * 2; 
+            
             const fallbackRadius = 23;
-            const otherMarkerRadius = 15; // For generic circle markers
+            
+            // Text style for ALL labels on map
+            const labelBgColor = '#ff5200'; // Procore Orange
+            const labelTextColor = '#ffffff'; // White text
+            const labelFont = '700 12px Inter'; // Bold
+            const labelPaddingX = 10;
+            const labelPaddingY = 5;
+            const labelRadius = 8;
+
+            // NEW: Border thickness
+            const circleBorderWidth = 1.5;
 
             stops.forEach((stop, index) => {
                 
-                if (index === 0) { // Stop 1: Initial Prompt (Building Icon) - UNIQUE
+                const stopName = stop.name.toUpperCase();
+                let yOffset;
+
+                if (index === 0) { // Index 0: Initial Prompt (Start)
                     if (startIcon.complete && startIcon.src) {
                         ctx.drawImage(startIcon, stop.x - markerSize / 2, stop.y - markerSize, markerSize, markerSize);
-                        ctx.fillStyle = '#1f2937';
-                        ctx.font = '600 12px Inter';
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'top';
-                        ctx.fillText("START", stop.x, stop.y + 10);
+                        yOffset = 10;
                     } else {
                         // Fallback logic for start icon
                         ctx.fillStyle = stop.color;
                         ctx.beginPath();
                         ctx.arc(stop.x, stop.y, fallbackRadius, 0, Math.PI * 2);
                         ctx.fill();
-                        ctx.fillStyle = '#1f2937';
-                        ctx.font = '600 12px Inter';
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'middle';
-                        ctx.fillText("1", stop.x, stop.y);
+                        yOffset = fallbackRadius + 5;
                     }
-                } else { // Stops 2, 3, and 4 (Generic Circles) - UNIFIED
+
+                    // Draw START label (Custom Button Style)
+                    ctx.font = labelFont;
+                    const textWidth = ctx.measureText("START").width;
+                    const rectWidth = textWidth + labelPaddingX * 2;
+                    const rectHeight = 12 + labelPaddingY * 2; // 12px font height
+
+                    const rectX = stop.x - rectWidth / 2;
+                    const rectY = stop.y + yOffset;
+
+                    ctx.fillStyle = labelBgColor;
+                    roundRect(ctx, rectX, rectY, rectWidth, rectHeight, labelRadius);
+                    ctx.fill();
+
+                    ctx.fillStyle = labelTextColor;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText("START", stop.x, rectY + rectHeight / 2);
+
+                } else if (index === 1 || index === 2) { // Index 1 (Harvey) and Index 2 (Gemini) - Large Image Circle
+                    
+                    const isVisited = index <= currentSegment;
+                    const iconToDraw = (index === 1) ? harveyIcon : geminiIcon;
+                    const color = stop.color;
+                    
+                    if (iconToDraw.complete && iconToDraw.src) {
+                        
+                        // 1. Draw solid background circle
+                        ctx.beginPath();
+                        ctx.arc(stop.x, stop.y, iconCircleRadius, 0, Math.PI * 2);
+                        // Use the color for the background
+                        ctx.fillStyle = isVisited ? color : '#6b7280'; 
+                        ctx.fill(); 
+                        
+                        // 2. Set up the clipping mask on the circle area
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.arc(stop.x, stop.y, iconCircleRadius, 0, Math.PI * 2, false);
+                        ctx.clip();
+                        
+                        // 3. Draw the image, sized to fill the entire clipped circle area (100x100)
+                        ctx.drawImage(
+                            iconToDraw, 
+                            stop.x - iconCircleRadius, 
+                            stop.y - iconCircleRadius, 
+                            iconImageSize, 
+                            iconImageSize
+                        );
+                        ctx.restore(); // Restore the canvas context (removes clip mask)
+                        
+                        // Draw a border around the circle for prominence
+                        ctx.strokeStyle = '#1f2937';
+                        ctx.lineWidth = circleBorderWidth; // Thin border
+                        ctx.beginPath();
+                        ctx.arc(stop.x, stop.y, iconCircleRadius, 0, Math.PI * 2);
+                        ctx.stroke();
+
+                        yOffset = iconCircleRadius + 5;
+                    } else {
+                         // Fallback to generic circle
+                        ctx.fillStyle = isVisited ? color : '#6b7280';
+                        ctx.beginPath();
+                        ctx.arc(stop.x, stop.y, otherMarkerRadius, 0, Math.PI * 2);
+                        ctx.fill();
+                        yOffset = otherMarkerRadius + 5;
+                    }
+                    
+                    // Draw Label (Custom Button Style)
+                    ctx.font = labelFont;
+                    const textWidth = ctx.measureText(stopName).width;
+                    const rectWidth = textWidth + labelPaddingX * 2;
+                    const rectHeight = 12 + labelPaddingY * 2; 
+
+                    const rectX = stop.x - rectWidth / 2;
+                    const rectY = stop.y + yOffset;
+
+                    ctx.fillStyle = labelBgColor;
+                    roundRect(ctx, rectX, rectY, rectWidth, rectHeight, labelRadius);
+                    ctx.fill();
+
+                    ctx.fillStyle = labelTextColor;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(stopName, stop.x, rectY + rectHeight / 2);
+
+
+                } else { // Index 3: Final Output (New Stop 3) - Small circle and button
                     const isVisited = index <= currentSegment;
                     
                     // Draw the circle background
@@ -679,21 +914,31 @@
                     ctx.arc(stop.x, stop.y, otherMarkerRadius, 0, Math.PI * 2);
                     ctx.fill();
 
-                    // Draw the number inside the circle for better contrast
-                    ctx.fillStyle = 'white';
-                    ctx.font = '600 14px Inter';
+                    // Draw a border around the small circle
+                    ctx.strokeStyle = '#1f2937';
+                    ctx.lineWidth = circleBorderWidth; // Thin border
+                    ctx.beginPath();
+                    ctx.arc(stop.x, stop.y, otherMarkerRadius, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // Draw the Label (Custom Button Style)
+                    const labelYOffset = otherMarkerRadius + 5;
+                    ctx.font = labelFont;
+                    const textWidth = ctx.measureText(stopName).width;
+                    const rectWidth = textWidth + labelPaddingX * 2;
+                    const rectHeight = 12 + labelPaddingY * 2; 
+
+                    const rectX = stop.x - rectWidth / 2;
+                    const rectY = stop.y + labelYOffset;
+
+                    ctx.fillStyle = labelBgColor;
+                    roundRect(ctx, rectX, rectY, rectWidth, rectHeight, labelRadius);
+                    ctx.fill();
+
+                    ctx.fillStyle = labelTextColor;
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(index + 1, stop.x, stop.y);
-                    
-                    // Draw the name below the circle
-                    ctx.fillStyle = '#1f2937';
-                    ctx.font = '400 12px Inter';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'top';
-                    // Display only the stop name (e.g., "Harvey.ai")
-                    const stopName = stop.name.split(': ')[1] || stop.name;
-                    ctx.fillText(stopName, stop.x, stop.y + otherMarkerRadius + 5);
+                    ctx.fillText(stopName, stop.x, rectY + rectHeight / 2);
                 }
             });
             ctx.textBaseline = 'alphabetic'; // Reset text baseline
@@ -723,9 +968,21 @@
             const listEl = document.getElementById('stopList');
             if (!listEl) return;
 
-            listEl.innerHTML = stops.map((stop, index) => {
-                const status = index === 0 ? 'Start' : index === totalStops - 1 ? 'End' : `Stop ${index + 1}`;
-                const name = stop.name.split(': ')[1] || stop.name;
+            // Filter out the 'Initial Prompt' (Start) stop for the list
+            const stopsForList = stops.slice(1);
+
+            listEl.innerHTML = stopsForList.map((stop, index) => {
+                const number = index + 1; // 1, 2, 3
+                let status;
+                
+                if (number === 3) {
+                    status = 'End';
+                } else {
+                    status = `Stop ${number}`;
+                }
+                
+                const name = stop.name;
+                
                 return `
                     <li class="flex items-center">
                         <span style="background-color: ${stop.color};" class="inline-block w-3 h-3 rounded-full mr-2"></span>
@@ -898,14 +1155,14 @@
                         // Using the shared logo content
                         logo: sharedGeminiMoonLogo,
                         isImageLogo: true, 
-                        usage: "A specialized, secure version for **highly sensitive tasks** requiring maximum data isolation, such as privileged communication review. Click for the full **In-House When to Use Guide**.",
+                        usage: "A specialized, secure version for **highly sensitive tasks** requiring maximum data isolation, suchs as privileged communication review. Click for the full **In-House When to Use Guide**.",
                         capabilities: { SD: true }, // Secure Data capability
                         cheatSheet: {
                             title: "Secure Data Isolation & Privileged Review",
                             sections: [
                                 {
                                     heading: "Secure Environment for Sensitive Data",
-                                    points: ["Use the isolated instance for highly confidential legal tasks, such as internal investigations, whistle-blower reports, or privileged communication review in litigation hold scenarios.", "Ensure that data processed here does not inform the training or context of general-purpose AI models."]
+                                    points: ["Use the isolated instance for highly confidential legal tasks, suchs as internal investigations, whistle-blower reports, or privileged communication review in litigation hold scenarios.", "Ensure that data processed here does not inform the training or context of general-purpose AI models."]
                                 },
                                 {
                                     heading: "Auditing & Data Governance",
@@ -970,7 +1227,7 @@
                     if (found) return found;
                 }
             }
-            return { name: name, usage: 'Usage details are currently unavailable for this system.' };
+            return { name: name, usage: 'Usage details is currently unavailable for this system.' };
         }
 
         /**
@@ -1108,10 +1365,11 @@
         }
         
         /**
-         * Renders the capability matrix below the galaxy.
+         * Renders the capability matrix inside the new matrix tab.
          */
         function renderUsageMatrix() {
-            const matrixContainer = document.getElementById('usage-matrix');
+            // Updated target ID
+            const matrixContainer = document.getElementById('matrix-content-target');
             if (!matrixContainer) return;
             matrixContainer.innerHTML = ''; // Clear previous content
 
@@ -1196,10 +1454,12 @@
 
             // 3. Assemble and inject
             matrixContainer.innerHTML = `
-                <h2 class="text-3xl font-extrabold text-white text-center mb-6 pt-10 border-t border-gray-700">Usage Matrix: Tool Capabilities</h2>
+                <div class="text-center p-6 bg-gray-50 rounded-lg mb-6 shadow-md">
+                    <p class="text-lg font-bold text-gray-800">Review the core capabilities of each tool across key Legal, Regulatory, and Compliance use cases.</p>
+                </div>
                 <div class="matrix-table min-w-full overflow-x-auto">
-                    <!-- Ensure scrolling on small screens if necessary -->
-                    <div class="min-w-[1200px] lg:min-w-full">
+                    <!-- Re-applying the dark theme styles for the matrix table itself -->
+                    <div class="min-w-[1200px] lg:min-w-full bg-gray-900 rounded-xl shadow-2xl">
                         ${headerRow}
                         ${matrixBody}
                     </div>
@@ -1216,7 +1476,7 @@
             const sunElement = document.getElementById('sun-core');
 
             // Crucial check: only run if the elements exist (i.e., we are on the correct tab)
-            if (!galaxySystem || !sunElement || activeTab !== 'adventure-1') { // Changed to 'adventure-1'
+            if (!galaxySystem || !sunElement || activeMainTab !== 'adventure-1') { 
                  clearGalaxy(); // Clean up if running unexpectedly
                  return;
             }
@@ -1411,16 +1671,15 @@
             });
             // --- END INTERACTION LOGIC ---
             
-            // RENDER THE MATRIX
-            renderUsageMatrix();
-
+            // RENDER THE MATRIX - REMOVED from here
         } // End recalculateGalaxy function
         
         // --- END GALAXY DATA AND LOGIC ---
         
         // --- Initialization ---
         window.onload = function() {
-            switchTab('adventure-1');
+            // Initial load: switch to Legal Tech AI Galaxy
+            switchMainTab('adventure-1'); 
             // Attach galaxy resize listener globally (it will check if the tab is active before drawing)
             window.addEventListener('resize', recalculateGalaxy);
         }
